@@ -2,7 +2,7 @@
 
 var env = require('dotenv').load();
 var User = require('../user/user_model.js');
-var FitbitStrategy = require('./fitbit-passport.js');
+var FitbitStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy
 var FitbitApiClient = require('fitbit-node');
 var jwt = require('jsonwebtoken');
 var Q = require("q");
@@ -19,17 +19,20 @@ var mongoose = require('mongoose');
 var FITBIT_CONSUMER_KEY = process.env.FITBIT_CONSUMER_KEY;
 var FITBIT_CONSUMER_SECRET = process.env.FITBIT_CONSUMER_SECRET;
 
+var host = process.env.HOST || 'https://localhost:9000';
+
 var myClient = new FitbitApiClient(FITBIT_CONSUMER_KEY,FITBIT_CONSUMER_SECRET);
 
 var userId;
 
 module.exports = exports = {
   fitbitStrategy: new FitbitStrategy({
-    consumerKey: FITBIT_CONSUMER_KEY,
-    consumerSecret: FITBIT_CONSUMER_SECRET,
-    callbackURL: '/fitbit/authcallback'
+    clientID: FITBIT_CONSUMER_KEY,
+    clientSecret: FITBIT_CONSUMER_SECRET,
+    callbackURL: host + '/fitbit/authcallback',
+    scope: ['activity','heartrate','location','nutrition','profile','settings','sleep','social','weight']
     },
-    function (token, tokenSecret, profile, done) {
+    function (accessToken, refreshToken, profile, done) {
       var timestamp = new Date();
       userId = profile.id; //needed to send back with the url to the client to save to local storage
       process.nextTick(function(){

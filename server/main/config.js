@@ -9,19 +9,22 @@ var bodyParser     = require('body-parser'),
     session        = require('express-session'),
     expressJwt     = require('express-jwt');
 
-mongoose.connect(process.env.DB_URL || 'mongodb://localhost/fitApp');
+mongoose.connect(process.env.DB_URL || 'mongodb://127.0.0.1:27017/fitApp');
 /*
  * Include all your global env variables here.
 */
 module.exports = exports = function (app, express,passport, routers) {
   app.set('port', process.env.PORT || 9000);
-  app.set('base url', process.env.URL || 'http://127.0.0.1');
+  app.set('base url', process.env.URL || 'https://127.0.0.1');
   app.use(cookieParser());
   app.use(morgan('dev'));
-  app.use(bodyParser());
-  app.use(bodyParser.urlencoded());
+  
+  app.use(bodyParser.urlencoded({
+      extended: true
+  }));
+  app.use(bodyParser.json());
   app.use(middle.cors);
-  app.use(session({secret: process.env.SECRET || 'secret', maxAge: 360*5}));
+  app.use(session({ secret: process.env.SECRET || 'secret', maxAge: 360 * 5, resave: true, saveUninitialized: true}));
   /*
    * passport.initialize() middleware is required to initialize Passport.
    * Because this application uses persistent login sessions, passport.session()

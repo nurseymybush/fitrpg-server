@@ -1,9 +1,10 @@
 /**
  * Module dependencies.
  */
+//Changing to Oauth2
 var util = require('util')
-  , OAuthStrategy = require('passport-oauth').OAuthStrategy
-  , InternalOAuthError = require('passport-oauth').InternalOAuthError;
+  , OAuthStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy
+  , InternalOAuthError = require('passport-oauth2').InternalOAuthError;
 
 
 /**
@@ -41,12 +42,13 @@ var util = require('util')
  * @api public
  */
 function Strategy(options, verify) {
-  options = options || {};
-  options.requestTokenURL = options.requestTokenURL || 'https://api.fitbit.com/oauth/request_token';
-  options.accessTokenURL = options.accessTokenURL || 'https://api.fitbit.com/oauth/access_token';
-  options.userAuthorizationURL = options.userAuthorizationURL || 'https://www.fitbit.com/oauth/authorize?display=touch';
-  options.sessionKey = options.sessionKey || 'oauth:fitbit';
 
+  options = options || {};
+  options.authorizationURL = "https://www.fitbit.com/oauth2/authorize";
+  options.tokenURL = "https://api.fitbit.com/oauth2/token";
+  options.clientID = options.clientID;
+  options.clientSecret = options.clientSecret;
+  options.callbackURL = options.callbackURL || "https://localhost/callback";
   OAuthStrategy.call(this, options, verify);
   this.name = 'fitbit';
 }

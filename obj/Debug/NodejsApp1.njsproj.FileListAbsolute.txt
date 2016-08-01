@@ -1,0 +1,2 @@
+C:\Users\Chance\Documents\fitrpg-server\obj\Debug\NodejsApp1.njsprojResolveAssemblyReference.cache
+C:\Users\Chance\Documents\fitrpg-server\bin\Microsoft.NodejsTools.WebRole.dll

@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5096bc99-bea9-43a4-88c5-5324ce39c2ea}</ProjectGuid>
+    <ProjectHome />
+    <ProjectView>ShowAllFiles</ProjectView>
+    <StartupFile>server.js</StartupFile>
+    <WorkingDirectory>.</WorkingDirectory>
+    <OutputPath>.</OutputPath>
+    <ProjectTypeGuids>{3AF33F2E-1136-4D97-BBB7-1795711AC8B8};{349c5851-65df-11da-9384-00065b846f21};{9092AA53-FB77-4645-B42D-1CCCA6BD08BD}</ProjectTypeGuids>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'" />
+  <PropertyGroup Condition="'$(Configuration)' == 'Release'" />
+  <ItemGroup>
+    <Content Include="package.json" />
+    <Content Include="README.md" />
+    <Compile Include="server.js" />
+    <Content Include="hooks\README.md" />
+    <Content Include="readme\github_promo.png" />
+    <Content Include="readme\google_play.png" />
+    <Content Include="static\loggedIn.html" />
+    <Compile Include="server\battle\battle_controllers.js" />
+    <Compile Include="server\battle\battle_model.js" />
+    <Compile Include="server\battle\battle_routes.js" />
+    <Compile Include="server\feedback\feedback_controllers.js" />
+    <Compile Include="server\feedback\feedback_model.js" />
+    <Compile Include="server\feedback\feedback_routes.js" />
+    <Compile Include="server\fitbit\fitbit-passport.js" />
+    <Compile Include="server\fitbit\fitbit_activity_ids.js" />
+    <Compile Include="server\fitbit\fitbit_controllers.js" />
+    <Compile Include="server\fitbit\fitbit_routes.js" />
+    <Compile Include="server\fitbit\fitbit_utility.js" />
+    <Compile Include="server\group\group_controllers.js" />
+    <Compile Include="server\group\group_model.js" />
+    <Compile Include="server\group\group_routes.js" />
+    <Compile Include="server\item\item_controllers.js" />
+    <Compile Include="server\item\item_model.js" />
+    <Compile Include="server\item\item_routes.js" />
+    <Compile Include="server\jawbone\jawbone-passport.js" />
+    <Compile Include="server\jawbone\jawbone_controllers.js" />
+    <Compile Include="server\jawbone\jawbone_routes.js" />
+    <Compile Include="server\main\app.js" />
+    <Compile Include="server\main\config.js" />
+    <Compile Include="server\main\middleware.js" />
+    <Compile Include="server\pastGroup\past_group_controllers.js" />
+    <Compile Include="server\pastGroup\past_group_model.js" />
+    <Compile Include="server\pastGroup\past_group_routes.js" />
+    <Compile Include="server\pastSolo\past_solo_controllers.js" />
+    <Compile Include="server\pastSolo\past_solo_model.js" />
+    <Compile Include="server\pastSolo\past_solo_routes.js" />
+    <Compile Include="server\quest\quest_controllers.js" />
+    <Compile Include="server\quest\quest_model.js" />
+    <Compile Include="server\quest\quest_routes.js" />
+    <Compile Include="server\settings\settings_controller.js" />
+    <Compile Include="server\settings\settings_model.js" />
+    <Compile Include="server\settings\settings_routes.js" />
+    <Compile Include="server\solo\solo_controllers.js" />
+    <Compile Include="server\solo\solo_model.js" />
+    <Compile Include="server\solo\solo_routes.js" />
+    <Compile Include="server\user\user_controllers.js" />
+    <Compile Include="server\user\user_model.js" />
+    <Compile Include="server\user\user_routes.js" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="hooks" />
+    <Folder Include="readme" />
+    <Folder Include="server" />
+    <Folder Include="server\battle" />
+    <Folder Include="server\feedback" />
+    <Folder Include="server\fitbit" />
+    <Folder Include="server\group" />
+    <Folder Include="server\item" />
+    <Folder Include="server\jawbone" />
+    <Folder Include="server\main" />
+    <Folder Include="server\pastGroup" />
+    <Folder Include="server\pastSolo" />
+    <Folder Include="server\quest" />
+    <Folder Include="server\settings" />
+    <Folder Include="server\solo" />
+    <Folder Include="server\user" />
+    <Folder Include="static" />
+    <Folder Include="typings\" />
+    <Folder Include="typings\globals\" />
+    <Folder Include="typings\globals\node\" />
+  </ItemGroup>
+  <ItemGroup>
+    <TypeScriptCompile Include="typings\globals\node\index.d.ts" />
+    <TypeScriptCompile Include="typings\index.d.ts" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.Common.targets" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <!--Do not delete the following Import Project.  While this appears to do nothing it is a marker for setting TypeScript properties before our import that depends on them.-->
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.targets" Condition="False" />
+  <Import Project="$(VSToolsPath)\Node.js Tools\Microsoft.NodejsTools.targets" />
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
+        <WebProjectProperties>
+          <UseIIS>False</UseIIS>
+          <AutoAssignPort>True</AutoAssignPort>
+          <DevelopmentServerPort>0</DevelopmentServerPort>
+          <DevelopmentServerVPath>/</DevelopmentServerVPath>
+          <IISUrl>http://localhost:48022/</IISUrl>
+          <NTLMAuthentication>False</NTLMAuthentication>
+          <UseCustomServer>True</UseCustomServer>
+          <CustomServerUrl>http://localhost:1337</CustomServerUrl>
+          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+        </WebProjectProperties>
+      </FlavorProperties>
+      <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}" User="">
+        <WebProjectProperties>
+          <StartPageUrl>
+          </StartPageUrl>
+          <StartAction>CurrentPage</StartAction>
+          <AspNetDebugging>True</AspNetDebugging>
+          <SilverlightDebugging>False</SilverlightDebugging>
+          <NativeDebugging>False</NativeDebugging>
+          <SQLDebugging>False</SQLDebugging>
+          <ExternalProgram>
+          </ExternalProgram>
+          <StartExternalURL>
+          </StartExternalURL>
+          <StartCmdLineArguments>
+          </StartCmdLineArguments>
+          <StartWorkingDirectory>
+          </StartWorkingDirectory>
+          <EnableENC>False</EnableENC>
+          <AlwaysStartWebServerOnDebug>False</AlwaysStartWebServerOnDebug>
+        </WebProjectProperties>
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
