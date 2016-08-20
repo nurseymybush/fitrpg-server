@@ -9,13 +9,13 @@ var bodyParser     = require('body-parser'),
     session        = require('express-session'),
     expressJwt     = require('express-jwt');
 
-mongoose.connect(process.env.DB_URL || 'mongodb://127.0.0.1:27017/fitApp');
+mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fitApp');
 /*
  * Include all your global env variables here.
 */
 module.exports = exports = function (app, express,passport, routers) {
   app.set('port', process.env.PORT || 9000);
-  app.set('base url', process.env.URL || 'https://127.0.0.1');
+  app.set('base url', process.env.URL || 'https://localhost');
   app.use(cookieParser());
   app.use(morgan('dev'));
   
