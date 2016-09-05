@@ -1,7 +1,7 @@
 {
-  "name": "FitRPG",
-  "version": "1.0.0",
-  "description": "FitRPG",
+  "name": "FitRPG-Enhanced",
+  "version": "1.1.0",
+  "description": "FitRPG-Enhanced",
   "scripts": {
     "predeploy": "npm install",
     "start": "node server.js"
@@ -32,9 +32,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/fitrpg/fitrpg-server"
+    "url": "git://github.com/nurseymybush/fitrpg-server"
   },
   "bugs": {
-    "url": "http://github.com/fitrpg/fitrpg-server/issues"
+    "url": "http://github.com/nurseymybush/fitrpg-server/issues"
   }
 }
