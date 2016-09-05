@@ -34,9 +34,11 @@ module.exports = exports = {
     },
     function (accessToken, refreshToken, profile, done) {
       var timestamp = new Date();
-      console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
-      //should be able to see in heroku log
-      userId = profile.id; //needed to send back with the url to the client to save to local storage
+      //console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
+      //should be able to see in heroku log - this doesnt show in heroku
+      
+      var userIdTemp = profile.id; //needed to send back with the url to the client to save to local storage
+      userId = userIdTemp.slice(0, userIdTemp.length - 4);
       process.nextTick(function(){
         User.findByIdQ({_id: profile.id})
           .then(function (foundUser) {
