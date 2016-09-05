@@ -69,7 +69,12 @@ module.exports = exports = {
   getOauthToken: function (req, res, next) {
     var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
     var month = 43829;
-    var server_token = jwt.sign({id: userId}, process.env.SECRET || "secret", { expiresInMinutes: month });
+    //changed the below from expiresInMinutes to expires_in
+    var server_token = jwt.sign(
+      {id: userId}, 
+      process.env.SECRET || "secret", 
+      { expiresIn: month }
+    );
     res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
   },
 
