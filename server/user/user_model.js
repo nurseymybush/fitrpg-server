@@ -5,7 +5,8 @@ var mongoose = require('mongoose');
 var UserSchema = new mongoose.Schema({
   _id                : String,
   accessToken        : String,
-  accessTokenSecret  : String,
+  //accessTokenSecret  : String,
+  refreshToken        : String, //chance refresh token
   stringLastChecked  : String,
   friendRequests     : [],
   lastChecked        : Date, // the last time we pulled data from fitbit or jawbone

@@ -1,6 +1,8 @@
 'use strict'
 var controller = require('./fitbit_controllers.js');
 var User = require('../user/user_model.js');
+var refresh = require('passport-oauth2-refresh');
+
 module.exports = exports = function(router, passport) {
 
   // see if we can set this elsewhere
@@ -39,6 +41,8 @@ module.exports = exports = function(router, passport) {
     .get(controller.finishLogin);
 
   passport.use(controller.fitbitStrategy);
+  refresh.use(controller.fitbitStrategy);//refresh token CHANCE
+
   router.use('/auth', passport.authenticate('fitbit'));
 
   // for fitbit it's a twp step process and we have to do passport auth twice
