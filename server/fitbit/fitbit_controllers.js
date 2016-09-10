@@ -38,6 +38,7 @@ module.exports = exports = {
       //should be able to see in heroku log - this doesnt show in heroku
 
       var userId = profile.id; //needed to send back with the url to the client to save to local storage
+      console.log(JSON.stringify(profile));//chance test
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
         User.findByIdQ({
@@ -83,7 +84,7 @@ module.exports = exports = {
         id: userId
       },
       process.env.SECRET || "secret", {
-        expiresIn: month
+        expiresIn: "7d"
       }
     );
     res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
@@ -327,6 +328,8 @@ module.exports = exports = {
         });
       })
       .fail(function(err) {
+        var originalDecoded = jwt.decode(accessToken, {complete: true});//chance refresh token
+        jwt.refresh(originalDecoded, 3600, process.env.SECRET);//chance refresh token
         res.send(err);
       })
       .done();
