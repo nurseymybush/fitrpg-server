@@ -3,7 +3,7 @@
 //var env = require('dotenv').load(); //using heroku env vars now
 var User = require('../user/user_model.js');
 //var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy
-var FitbitStrategy = require('passport-auth0');//chance try auth0
+var Auth0Strategy = require('passport-auth0');//chance try auth0
 var FitbitApiClient = require('fitbit-node');
 var jwt = require('jsonwebtoken');
 var Q = require("q");
