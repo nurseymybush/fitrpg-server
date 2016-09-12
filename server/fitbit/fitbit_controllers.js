@@ -44,12 +44,13 @@ module.exports = exports = {
       var timestamp = new Date();
       //console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
       //should be able to see in heroku log - this doesnt show in heroku
-      
+
       console.log(accessToken);
-      console.log(refreshToken);
+      console.log(refreshToken);//this is undefined
       console.log(extraParams);
 
-      var userId = profile.identities.user_id; //needed to send back with the url to the client to save to local storage
+      //the below is in an array that looks like identities[{"provider":"fitbit","user_id":"3KJZG4","connection":"fitbit","isSocial":true}]
+      var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
       console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
