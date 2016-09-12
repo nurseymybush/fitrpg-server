@@ -43,10 +43,13 @@ module.exports = exports = function(router, passport) {
   passport.use(controller.fitbitStrategy);
   refresh.use(controller.fitbitStrategy);//refresh token CHANCE
 
-  router.use('/auth', passport.authenticate('fitbit'));
+  //router.use('/auth', passport.authenticate('fitbit'));
+  router.use('/auth', passport.authenticate('auth0'));//chance try auth0
 
   // for fitbit it's a twp step process and we have to do passport auth twice
-  router.use('/authcallback', passport.authenticate('fitbit'));
+  //router.use('/authcallback', passport.authenticate('fitbit'));
+  router.use('/authcallback', passport.authenticate('auth0')); //chance try auth0
+  
   router.use('/authcallback', controller.getOauthToken);
 
 
