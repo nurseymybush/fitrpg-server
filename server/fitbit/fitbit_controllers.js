@@ -28,9 +28,9 @@ var userId;
 
 module.exports = exports = {
   fitbitStrategy: new Auth0Strategy({
-    domain: AUTH0_DOMAIN,
-    clientID: AUTH0_CLIENT_ID,
-    clientSecret: AUTH0_CLIENT_SECRET,
+    domain: process.env.AUTH0_DOMAIN,
+    clientID: process.env.AUTH0_CLIENT_ID,
+    clientSecret: process.env.AUTH0_CLIENT_SECRET,
     callbackURL: host + '/fitbit/authcallback'
   },
     //fitbitStrategy: new FitbitStrategy({
