@@ -3,8 +3,8 @@
  */
 //Changing to Oauth2
 var util = require('util')
-  //, OAuthStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy
-  , OAuthStrategy = require('passport-auth0') //chance try auth0
+  , OAuthStrategy = require( 'passport-fitbit-oauth2' ).FitbitOAuth2Strategy
+  //, OAuthStrategy = require('passport-auth0') //chance try auth0
   , InternalOAuthError = require('passport-oauth2').InternalOAuthError;
 
 
