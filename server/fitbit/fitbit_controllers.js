@@ -3,7 +3,7 @@
 //var env = require('dotenv').load(); //using heroku env vars now
 var User = require('../user/user_model.js');
 var FitbitStrategy = require('passport-fitbit-oauth2').FitbitOAuth2Strategy
-//var Auth0Strategy = require('passport-auth0'); //chance try auth0
+  //var Auth0Strategy = require('passport-auth0'); //chance try auth0
 var FitbitApiClient = require('fitbit-node');
 var jwt = require('jsonwebtoken');
 var Q = require("q");
@@ -33,25 +33,25 @@ module.exports = exports = {
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
       callbackURL: host + '/fitbit/authcallback'
     },*/
-    fitbitStrategy: new FitbitStrategy({
+  fitbitStrategy: new FitbitStrategy({
       clientID: FITBIT_CONSUMER_KEY,
       clientSecret: FITBIT_CONSUMER_SECRET,
       callbackURL: host + '/fitbit/authcallback',
       scope: ['activity', 'heartrate', 'location', 'nutrition', 'profile', 'settings', 'sleep', 'social', 'weight']
     },
     function(accessToken, refreshToken, profile, done) {
-    //function(accessToken, refreshToken, extraParams, profile, done) {
+      //function(accessToken, refreshToken, extraParams, profile, done) {
       var timestamp = new Date();
       //console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
       //should be able to see in heroku log - this doesnt show in heroku
 
       console.log(accessToken);
-      console.log(refreshToken);//this is undefined
+      console.log(refreshToken); //this is undefined
       //console.log(extraParams);
-      console.log(JSON.stringify(profile));
+      //console.log(JSON.stringify(profile));
       //the below is in an array that looks like identities[{"provider":"fitbit","user_id":"3KJZG4","connection":"fitbit","isSocial":true}]
       //var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
-      var userId = profile.id;//chance test new way
+      var userId = profile.id; //chance test new way
       console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
@@ -160,7 +160,7 @@ module.exports = exports = {
       })
       .then(function(user) {
         if (accessToken && refreshToken) {
-          user.accessToken = token;
+          user.accessToken = accessToken;
           user.refreshToken = refreshToken
             //user.accessTokenSecret = tokenSecret;
         }
@@ -171,6 +171,8 @@ module.exports = exports = {
         return client.get('/profile.json', user.accessToken).then(function(results) {
 
           var profile = JSON.parse(results[0]);
+          console.log("in get profile data");
+          console.log(profile);
           user.profile.avatar = profile.user.avatar;
           user.provider = 'fitbit';
           user.profile.displayName = profile.user.displayName;
