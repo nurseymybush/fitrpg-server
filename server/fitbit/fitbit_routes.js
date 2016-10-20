@@ -51,7 +51,4 @@ module.exports = exports = function(router, passport) {
   //router.use('/authcallback', passport.authenticate('auth0')); //chance try auth0
   
   router.use('/authcallback', controller.getOauthToken);
-
-
- 
 };

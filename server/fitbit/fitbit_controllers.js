@@ -39,16 +39,16 @@ module.exports = exports = {
       callbackURL: host + '/fitbit/authcallback',
       scope: ['activity', 'heartrate', 'location', 'nutrition', 'profile', 'settings', 'sleep', 'social', 'weight']
     },
-    //function(accessToken, refreshToken, profile, done) {
-    function(accessToken, refreshToken, extraParams, profile, done) {
+    function(accessToken, refreshToken, profile, done) {
+    //function(accessToken, refreshToken, extraParams, profile, done) {
       var timestamp = new Date();
       //console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
       //should be able to see in heroku log - this doesnt show in heroku
 
       console.log(accessToken);
       console.log(refreshToken);//this is undefined
-      console.log(extraParams);
-
+      //console.log(extraParams);
+      console.log(JSON.stringify(profile));
       //the below is in an array that looks like identities[{"provider":"fitbit","user_id":"3KJZG4","connection":"fitbit","isSocial":true}]
       var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
       console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
