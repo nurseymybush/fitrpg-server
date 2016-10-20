@@ -27,18 +27,18 @@ var myClient = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
 var userId;
 
 module.exports = exports = {
-  fitbitStrategy: new Auth0Strategy({
+  /*fitbitStrategy: new Auth0Strategy({
       domain: process.env.AUTH0_DOMAIN,
       clientID: process.env.AUTH0_CLIENT_ID,
       clientSecret: process.env.AUTH0_CLIENT_SECRET,
       callbackURL: host + '/fitbit/authcallback'
+    },*/
+    fitbitStrategy: new FitbitStrategy({
+      clientID: FITBIT_CONSUMER_KEY,
+      clientSecret: FITBIT_CONSUMER_SECRET,
+      callbackURL: host + '/fitbit/authcallback',
+      scope: ['activity', 'heartrate', 'location', 'nutrition', 'profile', 'settings', 'sleep', 'social', 'weight']
     },
-    //fitbitStrategy: new FitbitStrategy({
-    //clientID: FITBIT_CONSUMER_KEY,
-    //clientSecret: FITBIT_CONSUMER_SECRET,
-    //callbackURL: host + '/fitbit/authcallback',
-    //scope: ['activity', 'heartrate', 'location', 'nutrition', 'profile', 'settings', 'sleep', 'social', 'weight']
-    //},
     //function(accessToken, refreshToken, profile, done) {
     function(accessToken, refreshToken, extraParams, profile, done) {
       var timestamp = new Date();
