@@ -50,7 +50,8 @@ module.exports = exports = {
       //console.log(extraParams);
       console.log(JSON.stringify(profile));
       //the below is in an array that looks like identities[{"provider":"fitbit","user_id":"3KJZG4","connection":"fitbit","isSocial":true}]
-      var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
+      //var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
+      var userId = profile.id;//chance test new way
       console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
