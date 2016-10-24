@@ -185,6 +185,8 @@ module.exports = exports = {
         return client.get('/friends.json', user.accessToken).then(function(results) {
           var currentFriends = user.friends;
           var friends = JSON.parse(results[0]).friends;
+          console.log('in get friend data');
+          console.log(friends);
           var fitbitFriends = [];
           for (var i = 0; i < friends.length; i++) {
             fitbitFriends.push(friends[i].user.encodedId);
@@ -204,7 +206,10 @@ module.exports = exports = {
         //return client.requestResource('/activities/tracker/steps/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/steps/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           user.attributes.experience = user.attributes.experience || 0;
-          user.fitbit.experience = utils.calcCumValue(JSON.parse(results[0])['activities-tracker-steps']);
+          var activities_tracker_steps = JSON.parse(results[0])['activities-tracker-steps'];
+          console.log('in get actual steps');
+          console.log(activities_tracker_steps);
+          user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
           var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
           user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
           user.attributes.level = level;
@@ -215,7 +220,10 @@ module.exports = exports = {
         // GET SLEEP MINUTES AND CONVERT TO VITALITY
         //return client.requestResource('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          user.fitbit.vitality = utils.calcVitality(JSON.parse(results[0])['sleep-minutesAsleep']);
+          var sleep_minutesAsleep = JSON.parse(results[0])['sleep-minutesAsleep'];
+          console.log('in get minutes asleep');
+          console.log(sleep_minutesAsleep);
+          user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
           return user;
         });
       })
@@ -223,7 +231,10 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          user.fitbit.endurance = utils.calcEndurance(JSON.parse(results[0])['activities-tracker-distance']);
+          var activities_tracker_distance = JSON.parse(results[0])['activities-tracker-distance'];
+          console.log('in get distance');
+          console.log(activities_tracker_distance);
+          user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
           return user;
         });
       })
@@ -231,8 +242,10 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-
-          user.fitbit.attackBonus = utils.calcAttackBonus(JSON.parse(results[0])['activities-minutesVeryActive']);
+          var activities_minutesVeryActive = JSON.parse(results[0])['activities-minutesVeryActive'];
+          console.log('in get minutes very active');
+          console.log(activities_minutesVeryActive);
+          user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
           return user;
         });
       })
@@ -254,8 +267,10 @@ module.exports = exports = {
         var hpURL = '/sleep/minutesAsleep/date/' + hpLastChecked + '/today.json';
         //return client.requestResource(hpURL, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get(hpURL, user.accessToken).then(function(results) {
-
-          user.fitbit.HPRecov = utils.calcHpRecov(JSON.parse(results[0])['sleep-minutesAsleep']);
+          var sleep_minutesAsleep = JSON.parse(results[0])['sleep-minutesAsleep'];
+          console.log('in get asleep from last check');
+          console.log(sleep_minutesAsleep);
+          user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
           if (user.fitbit.HPRecov > 0) {
             user.HPChecker.foundSleep = true;
           }
@@ -284,8 +299,11 @@ module.exports = exports = {
             var dexterity = 0;
             var strength = 0;
             for (var i = 0; i < results.length; i++) {
-              dexterity += utils.calcStrDex(JSON.parse(results[i][0])['activities'], fitIds.dexterityIds);
-              strength += utils.calcStrDex(JSON.parse(results[i][0])['activities'], fitIds.strengthIds);
+              var activities_workouts = JSON.parse(results[i][0])['activities'];
+              console.log('in get workouts');
+              console.log(activities_workouts);
+              dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
+              strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
             }
             user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
             user.fitbit.strength = user.fitbit.strength + strength;
