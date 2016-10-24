@@ -364,7 +364,7 @@ module.exports = exports = {
         });
       })
       .fail(function(err) {
-        var originalDecoded = jwt.decode(accessToken, {
+        var originalDecoded = jwt.decode(user.accessToken, {
           complete: true
         }); //chance refresh token
         jwt.refresh(originalDecoded, 3600, process.env.SECRET); //chance refresh token
