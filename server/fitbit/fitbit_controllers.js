@@ -170,7 +170,7 @@ module.exports = exports = {
         //return client.requestResource('/profile.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/profile.json', user.accessToken).then(function(results) {
 
-          var profile = JSON.parse(results[0]);
+          var profile = results[0];
           console.log("in get profile data");
           console.log(profile);
           user.profile.avatar = profile.user.avatar;
@@ -184,7 +184,7 @@ module.exports = exports = {
         //return client.requestResource('/friends.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/friends.json', user.accessToken).then(function(results) {
           var currentFriends = user.friends;
-          var friends = JSON.parse(results[0]).friends;
+          var friends = results[0].friends;
           console.log('in get friend data');
           console.log(friends);
           var fitbitFriends = [];
@@ -206,7 +206,7 @@ module.exports = exports = {
         //return client.requestResource('/activities/tracker/steps/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/steps/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           user.attributes.experience = user.attributes.experience || 0;
-          var activities_tracker_steps = JSON.parse(results[0])['activities-tracker-steps'];
+          var activities_tracker_steps = results[0]['activities-tracker-steps'];
           console.log('in get actual steps');
           console.log(activities_tracker_steps);
           user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
@@ -220,7 +220,7 @@ module.exports = exports = {
         // GET SLEEP MINUTES AND CONVERT TO VITALITY
         //return client.requestResource('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          var sleep_minutesAsleep = JSON.parse(results[0])['sleep-minutesAsleep'];
+          var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
           console.log('in get minutes asleep');
           console.log(sleep_minutesAsleep);
           user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
@@ -231,7 +231,7 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          var activities_tracker_distance = JSON.parse(results[0])['activities-tracker-distance'];
+          var activities_tracker_distance = results[0]['activities-tracker-distance'];
           console.log('in get distance');
           console.log(activities_tracker_distance);
           user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
@@ -242,7 +242,7 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          var activities_minutesVeryActive = JSON.parse(results[0])['activities-minutesVeryActive'];
+          var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
           console.log('in get minutes very active');
           console.log(activities_minutesVeryActive);
           user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
@@ -267,7 +267,7 @@ module.exports = exports = {
         var hpURL = '/sleep/minutesAsleep/date/' + hpLastChecked + '/today.json';
         //return client.requestResource(hpURL, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get(hpURL, user.accessToken).then(function(results) {
-          var sleep_minutesAsleep = JSON.parse(results[0])['sleep-minutesAsleep'];
+          var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
           console.log('in get asleep from last check');
           console.log(sleep_minutesAsleep);
           user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
@@ -299,7 +299,7 @@ module.exports = exports = {
             var dexterity = 0;
             var strength = 0;
             for (var i = 0; i < results.length; i++) {
-              var activities_workouts = JSON.parse(results[i][0])['activities'];
+              var activities_workouts = results[i][0]['activities'];
               console.log('in get workouts');
               console.log(activities_workouts);
               dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
@@ -349,12 +349,12 @@ module.exports = exports = {
         return client.get(url, user.accessToken).then(function(results) {
 
           if (activity === 'distance') {
-            var total = utils.calcDecValue(JSON.parse(results[0])[qString]);
+            var total = utils.calcDecValue(results[0][qString]);
             res.json({
               total: total
             });
           } else {
-            var total = utils.calcCumValue(JSON.parse(results[0])[qString]);
+            var total = utils.calcCumValue(results[0][qString]);
             res.json({
               total: total
             });
@@ -390,12 +390,12 @@ module.exports = exports = {
         return client.get(url, user.accessToken).then(function(results) {
 
           if (activity === 'distance') { //decimals!
-            var total = (JSON.parse(results[0])[qString][0].value * 0.62137).toFixed(2); //convert to miles
+            var total = (results[0][qString][0].value * 0.62137).toFixed(2); //convert to miles
             res.json({
               total: total
             });
           } else {
-            var total = JSON.parse(results[0])[qString][0].value;
+            var total = results[0][qString][0].value;
             res.json({
               total: total
             });
