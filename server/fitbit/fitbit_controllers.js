@@ -64,7 +64,9 @@ module.exports = exports = {
             } else {
               var currentUser = new User({
                 _id: userId,
-                createdAt: timestamp
+                createdAt: timestamp,
+                accessToken: accessToken,//chance add to fix undefined errors
+                refreshToken: refreshToken//chance add to fix undefined errors
               });
               done(null, currentUser);
               exports.subscribeUser(accessToken, refreshToken, userId);
