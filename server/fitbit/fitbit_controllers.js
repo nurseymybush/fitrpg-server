@@ -45,14 +45,14 @@ module.exports = exports = {
       //console.log(profile.id);//the userid is wrong when requesting, i need to see what value is
       //should be able to see in heroku log - this doesnt show in heroku
 
-      console.log(accessToken);
-      console.log(refreshToken); //this is undefined
+      //console.log(accessToken);
+      //console.log(refreshToken); //this is undefined
       //console.log(extraParams);
       //console.log(JSON.stringify(profile));
       //the below is in an array that looks like identities[{"provider":"fitbit","user_id":"3KJZG4","connection":"fitbit","isSocial":true}]
       //var userId = profile.identities[0].user_id; //needed to send back with the url to the client to save to local storage
       userId = profile.id; //chance test new way
-      console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
+      //console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
         User.findByIdQ({
@@ -173,8 +173,8 @@ module.exports = exports = {
         return client.get('/profile.json', user.accessToken).then(function(results) {
 
           var profile = results[0];
-          console.log("in get profile data");
-          console.log(profile);
+          //console.log("in get profile data");
+          //console.log(profile);
           user.profile.avatar = profile.user.avatar;
           user.provider = 'fitbit';
           user.profile.displayName = profile.user.displayName;
@@ -187,8 +187,8 @@ module.exports = exports = {
         return client.get('/friends.json', user.accessToken).then(function(results) {
           var currentFriends = user.friends;
           var friends = results[0].friends;
-          console.log('in get friend data');
-          console.log(friends);
+          //console.log('in get friend data');
+          //console.log(friends);
           var fitbitFriends = [];
           for (var i = 0; i < friends.length; i++) {
             fitbitFriends.push(friends[i].user.encodedId);
@@ -209,8 +209,8 @@ module.exports = exports = {
         return client.get('/activities/tracker/steps/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           user.attributes.experience = user.attributes.experience || 0;
           var activities_tracker_steps = results[0]['activities-tracker-steps'];
-          console.log('in get actual steps');
-          console.log(activities_tracker_steps);
+          //console.log('in get actual steps');
+          //console.log(activities_tracker_steps);
           user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
           var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
           user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
@@ -223,8 +223,8 @@ module.exports = exports = {
         //return client.requestResource('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
-          console.log('in get minutes asleep');
-          console.log(sleep_minutesAsleep);
+          //console.log('in get minutes asleep');
+          //console.log(sleep_minutesAsleep);
           user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
           return user;
         });
@@ -234,8 +234,8 @@ module.exports = exports = {
         //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           var activities_tracker_distance = results[0]['activities-tracker-distance'];
-          console.log('in get distance');
-          console.log(activities_tracker_distance);
+          //console.log('in get distance');
+          //console.log(activities_tracker_distance);
           user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
           return user;
         });
@@ -245,8 +245,8 @@ module.exports = exports = {
         //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
-          console.log('in get minutes very active');
-          console.log(activities_minutesVeryActive);
+          //console.log('in get minutes very active');
+          //console.log(activities_minutesVeryActive);
           user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
           return user;
         });
@@ -270,8 +270,8 @@ module.exports = exports = {
         //return client.requestResource(hpURL, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get(hpURL, user.accessToken).then(function(results) {
           var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
-          console.log('in get asleep from last check');
-          console.log(sleep_minutesAsleep);
+          //console.log('in get asleep from last check');
+          //console.log(sleep_minutesAsleep);
           user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
           if (user.fitbit.HPRecov > 0) {
             user.HPChecker.foundSleep = true;
@@ -302,8 +302,8 @@ module.exports = exports = {
             var strength = 0;
             for (var i = 0; i < results.length; i++) {
               var activities_workouts = results[i][0]['activities'];
-              console.log('in get workouts');
-              console.log(activities_workouts);
+              //console.log('in get workouts');
+              //console.log(activities_workouts);
               dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
               strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
             }
