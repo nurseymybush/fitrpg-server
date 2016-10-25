@@ -28,7 +28,7 @@ module.exports = exports = {
     var jawboneTempCode = req.query['code']; //this code expires in 10 minutes
     var url = authorizeTokenLink + '?grant_type=authorization_code&' + 'client_id=' + client_id + '&client_secret=' + secret + '&code=' + jawboneTempCode;
     request.get(url, function (err,thing,jsonObj) {
-      if (err) { res.send(err)}
+      if (err) { res.sendStatus(err)}
         jsonObj = JSON.parse(jsonObj);
         var access_token = jsonObj['access_token']; //refresh token?
         // with this token we can get the user profile and if it exists, we'll get it, if not, we'll make it

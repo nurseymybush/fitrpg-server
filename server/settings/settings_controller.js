@@ -31,7 +31,7 @@ module.exports = exports = {
     var $promise = Q.nbind(Settings.create, Settings);
     $promise(req.body)
       .then(function (id) {
-        res.send(id);
+        res.sendStatus(id);
       })
       .fail(function (reason) {
         next(reason);

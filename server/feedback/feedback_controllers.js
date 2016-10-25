@@ -33,7 +33,7 @@ module.exports = exports = {
     console.log(req.body.params);
     $promise(req.body)
       .then(function (id) {
-        res.send(id);
+        res.sendStatus(id);
       })
       .fail(function (reason) {
         next(reason);

@@ -31,7 +31,7 @@ module.exports = exports = {
     var $promise = Q.nbind(PastGroup.save, PastGroup);
     $promise(req.body.pastGroup)
       .then(function (id) {
-        res.send(id);
+        res.sendStatus(id);
       })
       .fail(function (reason) {
         next(reason);

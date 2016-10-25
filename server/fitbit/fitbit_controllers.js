@@ -82,7 +82,7 @@ module.exports = exports = {
 
   sendBrokenResponse: function(req, res, next) {
     console.log('gets to the broken response');
-    res.send(200);
+    res.sendStatus(200);
   },
   //chance refresh token
   send401Response: function() {
@@ -135,7 +135,7 @@ module.exports = exports = {
     }
 
     res.set('Content-Type', 'application/json');
-    res.send(204);
+    res.sendStatus(204);
   },
 
   // typically, this window should never be seen and just automatically closed,
@@ -151,7 +151,7 @@ module.exports = exports = {
   retrieveData: function(req, res, next) {
     var id = req.params.id;
     exports.getAllData(id);
-    res.send(200);
+    res.sendStatus(200);
   },
 
   getAllData: function(id, cb, accessToken, refreshToken) {
@@ -368,7 +368,7 @@ module.exports = exports = {
           complete: true
         }); //chance refresh token
         jwt.refresh(originalDecoded, 3600, process.env.SECRET); //chance refresh token
-        res.send(err);
+        res.sendStatus(err);
       })
       .done();
   },
@@ -405,7 +405,7 @@ module.exports = exports = {
         });
       })
       .fail(function(err) {
-        res.send(err);
+        res.sendStatus(err);
       })
       .done();
   }
@@ -446,9 +446,11 @@ var getDatesArray = function(startDate, stopDate) {
 //Utility function to return a promise from save, probably move elsewhere to a utils area
 //or figure out if i can use saveQ
 var saveInPromise = function(model) {
-  var promise = new mongoose.Promise();
+  //var promise = new mongoose.Promise();
+  var deferred = Q.defer();
   model.save(function(err, result) {
-    promise.resolve(err, result);
+    //promise.resolve(err, result);
+    deferred.resolve(err, result);
   });
-  return promise;
+  return deferred.promise;
 }
