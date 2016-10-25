@@ -31,7 +31,7 @@ module.exports = exports = {
     var $promise = Q.nbind(User.create, User);
     $promise(req.body)
       .then(function (id) {
-        res.sendStatus(id);
+        res.send(id);
       })
       .fail(function (reason) {
         next(reason);
@@ -44,7 +44,7 @@ module.exports = exports = {
     var $promise = Q.nbind(User.update, User);
     $promise({ _id : id}, req.body)
       .then(function (numberaffected) {
-        res.sendStatus(numberaffected);
+        res.send(numberaffected);
       })
       .fail(function (reason) {
         next(reason);

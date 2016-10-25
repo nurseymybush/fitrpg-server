@@ -34,7 +34,7 @@ module.exports = exports = {
     console.log(req.body.battle);
     $promise(req.body)
       .then(function (id) {
-        res.sendStatus(id);
+        res.send(id);
       })
       .fail(function (reason) {
         next(reason);
