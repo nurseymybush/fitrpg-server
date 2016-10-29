@@ -343,6 +343,7 @@ module.exports = exports = {
     var endDate = req.params.endDate;
     var qString = type + '-' + activity;
     var url = '/' + type + '/' + activity + '/date/' + startDate + '/' + endDate + '.json';
+    console.log(url);
     User.findByIdQ({
         _id: id
       })
@@ -351,6 +352,7 @@ module.exports = exports = {
         return client.get(url, user.accessToken).then(function(results) {
 
           if (activity === 'distance') {
+            console.log(qString);
             var total = utils.calcDecValue(results[0][qString]);
             res.json({
               total: total
