@@ -7,6 +7,7 @@ var bodyParser     = require('body-parser'),
     morgan         = require('morgan'),
     methodOverride = require('method-override'),
     session        = require('express-session'),
+    RedisStore = require('connect-redis')(session),
     expressJwt     = require('express-jwt');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fitApp');
@@ -24,7 +25,13 @@ module.exports = exports = function (app, express,passport, routers) {
   }));
   app.use(bodyParser.json());
   app.use(middle.cors);
-  app.use(session({ secret: process.env.SECRET || 'secret', maxAge: 360 * 5, resave: true, saveUninitialized: true}));
+  app.use(session({
+      store: new RedisStore(),
+      secret: process.env.SECRET || 'secret', 
+      maxAge: 360 * 5, 
+      resave: true, 
+      saveUninitialized: true
+  }));
   /*
    * passport.initialize() middleware is required to initialize Passport.
    * Because this application uses persistent login sessions, passport.session()
