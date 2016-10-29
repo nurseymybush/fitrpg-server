@@ -364,10 +364,11 @@ module.exports = exports = {
         });
       })
       .fail(function(err) {
-        var originalDecoded = jwt.decode(user.accessToken, {
-          complete: true
-        }); //chance refresh token
-        jwt.refresh(originalDecoded, 3600, process.env.SECRET); //chance refresh token
+        //commenting this out because crashes the server because you dont have user yet
+        //var originalDecoded = jwt.decode(user.accessToken, {
+        //  complete: true
+        //}); //chance refresh token
+        //jwt.refresh(originalDecoded, 3600, process.env.SECRET); //chance refresh token
         res.sendStatus(err);
       })
       .done();
