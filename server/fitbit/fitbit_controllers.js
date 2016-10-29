@@ -342,7 +342,7 @@ module.exports = exports = {
     var startDate = req.params.startDate;
     var endDate = req.params.endDate;
     var qString = type + '-' + activity;
-    var url = '/' + type + '/' + activity + '/date/' + startDate + '/' + endDate + '.json';
+    var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
     console.log(url);
     User.findByIdQ({
         _id: id
