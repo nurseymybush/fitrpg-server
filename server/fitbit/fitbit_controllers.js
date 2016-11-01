@@ -55,8 +55,7 @@ module.exports = exports = {
       //console.log(JSON.stringify(userId)); //chance test - prints to heroku logs
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
-        //User.findByIdQ({
-          User.findById({
+        User.findByIdQ({
             _id: userId
           })
           .then(function(foundUser) {
@@ -118,8 +117,7 @@ module.exports = exports = {
     var users = req.body;
     for (var j = 0; j < users.length; j++) {
       (function(i) {
-        //User.findByIdQ({
-          User.findById({
+        User.findByIdQ({
             _id: users[i].ownerId
           })
           .then(function(user) {
@@ -159,8 +157,7 @@ module.exports = exports = {
   getAllData: function(id, cb, accessToken, refreshToken) {
     var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
     var dateCreated;
-    //User.findByIdQ({
-      User.findById({
+    User.findByIdQ({
         _id: id
       })
       .then(function(user) {
@@ -347,8 +344,7 @@ module.exports = exports = {
     var qString = type + '-' + activity;
     var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
     console.log(url);
-    //User.findByIdQ({
-      User.findById({
+    User.findByIdQ({
         _id: id
       })
       .then(function(user) {
@@ -391,9 +387,7 @@ module.exports = exports = {
     var endTime = req.params.endTime;
     var qString = 'activities-' + activity;
     var url = '/activities/' + activity + '/date/' + startDate + '/1d/15min/time/' + startTime + '/' + endTime + '.json';
-    
-    //User.findByIdQ({
-    User.findById({
+    User.findByIdQ({
         _id: id
       })
       .then(function(user) {
