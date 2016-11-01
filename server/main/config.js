@@ -3,18 +3,20 @@
 var bodyParser     = require('body-parser'),
     cookieParser   = require('cookie-parser'),
     middle         = require('./middleware'),
-    mongoose       = require('mongoose-q')(), //mongoose-q then requires mongoose
+    //mongoose       = require('mongoose-q')(), //mongoose-q then requires mongoose
+    mongoose       = require('mongoose'),
+    Q              = require('q'),
     morgan         = require('morgan'),
     methodOverride = require('method-override'),
     session        = require('express-session'),
-    RedisStore = require('connect-redis')(session),
+    RedisStore     = require('connect-redis')(session),
     expressJwt     = require('express-jwt');
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fitApp');
 /*
  * Include all your global env variables here.
 */
-module.exports = exports = function (app, express,passport, routers) {
+module.exports = exports = function (app, express, passport, routers) {
   app.set('port', process.env.PORT || 9000);
   app.set('base url', process.env.URL || 'https://localhost');
   app.use(cookieParser());
