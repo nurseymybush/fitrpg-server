@@ -5,12 +5,14 @@ var bodyParser     = require('body-parser'),
     middle         = require('./middleware'),
     //mongoose       = require('mongoose-q')(), //mongoose-q then requires mongoose
     mongoose       = require('mongoose'),
-    Q              = require('q'),
+    //Q              = require('q'),
     morgan         = require('morgan'),
     methodOverride = require('method-override'),
     session        = require('express-session'),
     RedisStore     = require('connect-redis')(session),
     expressJwt     = require('express-jwt');
+
+mongoose.Promise = require('q').Promise;//to get rid of deprecated message
 
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/fitApp');
 /*
