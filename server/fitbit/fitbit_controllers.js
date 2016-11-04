@@ -95,23 +95,60 @@ module.exports = exports = {
 
   getOauthToken: function(req, res, next) {
     var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
-    var month = 43829;
-    //changed the below from expiresInMinutes to expires_in
+    
     var server_token = jwt.sign({
         id: userId
       },
       process.env.SECRET || "secret", {
-        expiresIn: "7d"
+        //expiresIn: "7d"
+        expiresIn: "1h"//1 hour to test refreshTokens
       }
     );
     res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
   },
+  
+  //chance try refresh token start 11/1
+  getOauthRefreshToken: function(req, res, next) {
+    var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
+    
+    var server_token = jwt.sign({
+        id: userId
+      },
+      process.env.SECRET || "secret", {
+        expiresIn: "1h"
+      }
+    );
+    //below is not correct
+    res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
+  },
+  //chance try refresh token end 11/1
 
   subscribeUser: function(fitbitAccessToken, fitbitRefreshToken, id) { //subscribe this user so we get push notifications
     var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
     //client.requestResource("/apiSubscriptions/" + id + ".json", "POST", fitbitToken, fitbitSecret);
     client.post('/apiSubscriptions/' + id + '.json', fitbitAccessToken);
   },
+
+  //chance try refresh start 11/3
+  validateUserToken: function(fitbitAccessToken, userId) { //subscribe this user so we get push notifications
+    var accessTokenMatches = false;
+    //find the user in the DB
+    User.findById({
+      _id: userId
+    })
+    .then(function(foundUser) {
+      if (foundUser) {
+        //if the accessToken for the found user equals the accessToken passed
+        if(foundUser.accessToken === fitbitAccessToken){
+          accessTokenMatches = true;
+        }
+      }
+      return accessTokenMatches;
+    })
+    .fail(function(err) { console.log(err); })
+    .done();
+  },
+  //chance try refresh end 11/3
 
   pushNotification: function(req, res, next) {
 
@@ -319,10 +356,11 @@ module.exports = exports = {
         return saveInPromise(user);
       })
       .fail(function(err) {
+        console.log("Chance need to refresh token");
         console.log(err);
 
-        //chance refresh token stuff
-
+        //TODO chance refresh token stuff
+        
       })
       .done();
 

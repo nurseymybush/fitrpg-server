@@ -45,6 +45,9 @@ module.exports = exports = function(router, passport) {
 
   router.use('/auth', passport.authenticate('fitbit'));
   //router.use('/auth', passport.authenticate('auth0'));//chance try auth0
+  
+  //validate the passed token and userid
+  router.use('/validate', controller.validateUserToken);
 
   // for fitbit it's a twp step process and we have to do passport auth twice
   router.use('/authcallback', passport.authenticate('fitbit'));

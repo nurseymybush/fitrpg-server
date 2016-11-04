@@ -6,7 +6,7 @@ var UserSchema = new mongoose.Schema({
   _id                : String,
   accessToken        : String,
   //accessTokenSecret  : String,
-  refreshToken        : String, //chance refresh token
+  refreshToken       : String, //chance refresh token
   stringLastChecked  : String,
   friendRequests     : [],
   lastChecked        : Date, // the last time we pulled data from fitbit or jawbone
@@ -57,8 +57,15 @@ var UserSchema = new mongoose.Schema({
     attackBonus  : {type: Number, default: 0},
     dexterity    : {type: Number, default: 0},
     strength     : {type: Number, default: 0},
-    HPRecov      : {type: Number, default:0},
-    experience   : {type: Number, default:0}
+    HPRecov      : {type: Number, default: 0},
+    experience   : {type: Number, default: 0}
+  },
+  bonusAttributes : {//this is the bonus for equipped items and weapons
+    vitality   : {type: Number, default: 20},
+    strength   : {type: Number, default: 20},
+    endurance  : {type: Number, default: 20},
+    dexterity  : {type: Number, default: 20},
+    HP         : {type: Number, default: 500}
   },
   jawbone : {
     sleepQuality       : String,
