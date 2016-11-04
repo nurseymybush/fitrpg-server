@@ -130,9 +130,11 @@ module.exports = exports = {
   },
 
   //chance try refresh start 11/3
-  validateUserToken: function(fitbitAccessToken, userId) { //subscribe this user so we get push notifications
+  validateUserToken: function(req, res) { //subscribe this user so we get push notifications
     var accessTokenMatches = false;
     //find the user in the DB
+    var fitbitAccessToken = req.body.fitbitAccessToken;
+    var userId = req.body.userId;
     User.findById({
       _id: userId
     })
@@ -143,7 +145,8 @@ module.exports = exports = {
           accessTokenMatches = true;
         }
       }
-      return accessTokenMatches;
+      //return accessTokenMatches;
+      res.send("" + accessTokenMatches);
     })
     .fail(function(err) { console.log(err); })
     .done();
