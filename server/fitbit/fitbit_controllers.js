@@ -100,8 +100,8 @@ module.exports = exports = {
         id: userId
       },
       process.env.SECRET || "secret", {
-        //expiresIn: "7d"
-        expiresIn: "1h"//1 hour to test refreshTokens
+        expiresIn: "7d"
+        //expiresIn: "1h"//1 hour to test refreshTokens
       }
     );
     res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
@@ -115,7 +115,8 @@ module.exports = exports = {
         id: userId
       },
       process.env.SECRET || "secret", {
-        expiresIn: "1h"
+        //expiresIn: "1h"
+        expiresIn:"7d"
       }
     );
     //below is not correct
@@ -129,7 +130,7 @@ module.exports = exports = {
     client.post('/apiSubscriptions/' + id + '.json', fitbitAccessToken);
   },
 
-  //chance try refresh start 11/3
+  //chance try refresh start 11/3 - this works -> send refresh token back or call another function that sends back new access token
   validateUserToken: function(req, res) { //subscribe this user so we get push notifications
     var accessTokenMatches = false;
     //find the user in the DB
