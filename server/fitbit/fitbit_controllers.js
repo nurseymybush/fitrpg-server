@@ -390,7 +390,7 @@ module.exports = exports = {
     var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
     console.log(url);
     //User.findByIdQ({
-      User.findByIdQ({
+      User.findById({
         _id: id
       })
       .then(function(user) {
