@@ -393,7 +393,8 @@ module.exports = exports = {
     var activity = req.params.activity;
     var startDate = req.params.startDate;
     var endDate = req.params.endDate;
-    var qString = type + '-' + activity;
+    //var qString = type + '-' + activity;
+    var qString = 'activities-' + activity;
     var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
     console.log(url);
     //User.findByIdQ({
@@ -407,13 +408,13 @@ module.exports = exports = {
         return client.get(url, user.accessToken).then(function(results) {
 
           if (activity === 'distance') {
-            console.log(JSON.stringify(results[0]));
+            //console.log(JSON.stringify(results[0]));//looks like {"activities-steps":[{"dateTime":"2016-10-21","value":"9256"}]}
             var total = utils.calcDecValue(results[0][qString]);//issue is here, qString was distance-distance
             res.json({
               total: total
             });
           } else {
-            console.log(JSON.stringify(results[0]));
+            //console.log(JSON.stringify(results[0])); //looks like {"activities-distance":[{"dateTime":"2016-10-21","value":"7.025399999999999"}]}
             var total = utils.calcCumValue(results[0][qString]);
             res.json({
               total: total
