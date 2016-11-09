@@ -417,7 +417,8 @@ module.exports = exports = {
         //  complete: true
         //}); //chance refresh token
         //jwt.refresh(originalDecoded, 3600, process.env.SECRET); //chance refresh token
-        res.sendStatus(err);
+        //res.sendStatus(err);
+        console.log(err);
       })
       .done();
   },
