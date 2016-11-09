@@ -407,12 +407,13 @@ module.exports = exports = {
         return client.get(url, user.accessToken).then(function(results) {
 
           if (activity === 'distance') {
-            console.log(qString);
-            var total = utils.calcDecValue(results[0][qString]);
+            console.log(results);
+            var total = utils.calcDecValue(results[0][qString]);//issue is here
             res.json({
               total: total
             });
           } else {
+            console.log(results);
             var total = utils.calcCumValue(results[0][qString]);
             res.json({
               total: total
