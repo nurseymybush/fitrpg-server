@@ -16,7 +16,7 @@ var multiparty = require('multiparty');
 var format = require('util').format;
 
 var mongoose = require('mongoose');
-
+mongoose.Promise = require('q').Promise;
 var FITBIT_CONSUMER_KEY = process.env.FITBIT_CONSUMER_KEY;
 var FITBIT_CONSUMER_SECRET = process.env.FITBIT_CONSUMER_SECRET;
 
@@ -56,10 +56,11 @@ module.exports = exports = {
       //userId = userIdTemp.slice(0, userIdTemp.length - 4);-ddint get rid of the _=_ stuff
       process.nextTick(function() {
         //User.findByIdQ({
-          User.findById({
-            _id: userId
-          })
-          .then(function(foundUser) {
+          //User.findById({
+          //  _id: userId
+          //})
+        var promise = User.findById({_id: id}).exec();
+        promise.then(function(foundUser) {
             if (foundUser) {
               done(null, foundUser);
             } else {
@@ -136,10 +137,11 @@ module.exports = exports = {
     //find the user in the DB
     var fitbitAccessToken = req.body.fitbitAccessToken;
     var userId = req.body.userId;
-    User.findById({
-      _id: userId
-    })
-    .then(function(foundUser) {
+    //User.findById({
+    //  _id: userId
+    //})
+    var promise = User.findById({_id: userId}).exec();
+    promise.then(function(foundUser) {
       if (foundUser) {
         //if the accessToken for the found user equals the accessToken passed
         if(foundUser.accessToken === fitbitAccessToken){
@@ -160,10 +162,11 @@ module.exports = exports = {
     for (var j = 0; j < users.length; j++) {
       (function(i) {
         //User.findByIdQ({
-        User.findById({
-            _id: users[i].ownerId
-          })
-          .then(function(user) {
+        //User.findById({
+        //    _id: users[i].ownerId
+        //  })
+        var promise = User.findById({_id: users[i].ownerId}).exec();
+        promise.then(function(user) {
             user.needsUpdate = true;
             return user;
           })
@@ -201,10 +204,12 @@ module.exports = exports = {
     var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
     var dateCreated;
     //User.findByIdQ({
-      User.findById({
-        _id: id
-      })
-      .then(function(user) {
+    var promise = User.findById({_id: id}).exec();
+      //User.findById({
+      //  _id: id
+      //})
+      //.then(function(user) {
+      promise.then(function(user) {
         if (accessToken && refreshToken) {
           user.accessToken = accessToken;
           user.refreshToken = refreshToken
@@ -277,8 +282,9 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
+          console.log('in get distance');
+          console.log(results);
           var activities_tracker_distance = results[0]['activities-tracker-distance'];
-          //console.log('in get distance');
           //console.log(activities_tracker_distance);
           user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
           return user;
@@ -288,8 +294,9 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
           //console.log('in get minutes very active');
+          console.log(results);
+          var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
           //console.log(activities_minutesVeryActive);
           user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
           return user;
@@ -390,10 +397,12 @@ module.exports = exports = {
     var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
     console.log(url);
     //User.findByIdQ({
-      User.findById({
-        _id: id
-      })
-      .then(function(user) {
+      //User.findById({
+      //  _id: id
+      //})
+    var promise = User.findById({_id: id}).exec();
+
+    promise.then(function(user) {
         //return client.requestResource(url, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get(url, user.accessToken).then(function(results) {
 
@@ -435,10 +444,11 @@ module.exports = exports = {
     var qString = 'activities-' + activity;
     var url = '/activities/' + activity + '/date/' + startDate + '/1d/15min/time/' + startTime + '/' + endTime + '.json';
     //User.findByIdQ({
-      User.findById({
-        _id: id
-      })
-      .then(function(user) {
+      //User.findById({
+      //  _id: id
+      //})
+    var promise = User.findById({_id: id}).exec();
+    promise.then(function(user) {
         //return client.requestResource(url, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get(url, user.accessToken).then(function(results) {
 
@@ -456,7 +466,8 @@ module.exports = exports = {
         });
       })
       .fail(function(err) {
-        res.sendStatus(err);
+        //res.sendStatus(err);
+        console.log(err);
       })
       .done();
   }
