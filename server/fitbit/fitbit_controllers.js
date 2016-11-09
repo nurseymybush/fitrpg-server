@@ -283,7 +283,7 @@ module.exports = exports = {
         //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
           console.log('in get distance');
-          console.log(results);
+          //console.log(results);
           var activities_tracker_distance = results[0]['activities-tracker-distance'];
           //console.log(activities_tracker_distance);
           user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
@@ -294,8 +294,8 @@ module.exports = exports = {
       .then(function(user) {
         //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
         return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-          //console.log('in get minutes very active');
-          console.log(results);
+          console.log('in get minutes very active');
+          //console.log(results);
           var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
           //console.log(activities_minutesVeryActive);
           user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
