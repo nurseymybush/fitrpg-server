@@ -59,7 +59,7 @@ module.exports = exports = {
           //User.findById({
           //  _id: userId
           //})
-        var promise = User.findById({_id: id}).exec();
+        var promise = User.findById({_id: userId}).exec();
         promise.then(function(foundUser) {
             if (foundUser) {
               done(null, foundUser);
