@@ -15,6 +15,17 @@ module.exports = exports = {
         next(reason);
       })
   },
+  getListItems : function(req, res, next) {
+    var query = Item.find({'_id': { $in: idList}});
+    //$promise(req.params.idlist)
+    Q(query.exec())
+      .then(function (items) {
+        res.json(items);
+      })
+      .fail(function (reason) {
+        next(reason);
+      })
+  },
   getItems : function(req, res, next) {
     var $promise = Q.nbind(Item.find, Item);
     var url_parts = url.parse(req.url, true);
