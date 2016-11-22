@@ -10,4 +10,6 @@ module.exports = exports = function (router) {
   router.route('/:id')
     .get(controller.get);
 
+  router.route('/id:ids')
+    .get(controller.getListItems);
 }
