@@ -396,7 +396,7 @@ module.exports = exports = {
     //var qString = type + '-' + activity;
     var qString = 'activities-' + activity;
     var url = '/activities/' + activity + '/date/' + startDate + '/' + endDate + '.json';// this was /steps/steps/date/2016-10-21/2016-10-21.json
-    console.log(url);
+    console.log(url); // "/activities/steps/date/2016-11-13/2016-11-13.json"
     //User.findByIdQ({
       //User.findById({
       //  _id: id
