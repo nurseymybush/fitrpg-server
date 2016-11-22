@@ -16,7 +16,7 @@ module.exports = exports = {
       })
   },
   getListItems : function(req, res, next) {
-    var query = Item.find({'_id': { $in: idList}});
+    var query = Item.find({'_id': { $in: req.params.ids}});
     //$promise(req.params.idlist)
     Q(query.exec())
       .then(function (items) {
