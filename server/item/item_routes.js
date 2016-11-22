@@ -10,6 +10,6 @@ module.exports = exports = function (router) {
   router.route('/:id')
     .get(controller.get);
 
-  router.route('/getListItems/:ids')//chance add
-    .get(controller.getListItems);
+  router.route('/')//chance add
+    .post(controller.getListItems);
 }
