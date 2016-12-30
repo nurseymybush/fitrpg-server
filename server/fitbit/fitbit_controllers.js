@@ -101,8 +101,8 @@ module.exports = exports = {
         id: userId
       },
       process.env.SECRET || "secret", {
-        expiresIn: "7d"
-        //expiresIn: "1h"//1 hour to test refreshTokens
+        //expiresIn: "7d"
+        expiresIn: "1h"//1 hour to test refreshTokens
       }
     );
     res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later

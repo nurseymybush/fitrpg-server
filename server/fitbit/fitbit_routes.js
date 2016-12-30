@@ -1,5 +1,6 @@
 'use strict'
-var controller = require('./fitbit_controllers.js');
+//var controller = require('./fitbit_controllers.js');
+var controller = require('./fitbit_controllers_refactor.js');//TODO CHance test, remove this
 var User = require('../user/user_model.js');
 var refresh = require('passport-oauth2-refresh');
 
