@@ -21,8 +21,10 @@ module.exports = exports = function(router, passport) {
     .post(controller.pushNotification);
 
   /* Will later have to move the following route once we have jawbone data as well */
-  router.route('/refresh/:id')
-    .get(controller.retrieveData);
+  //router.route('/refresh/:id')
+    //.get(controller.retrieveData);//chance change this 3-16-17
+    router.use('/refresh',controller.refreshAccessToken);
+    //.get(controller.refreshAccessToken);
 
   router.route('/daterange/:id/:type/:activity/:startDate/:endDate')
     .get(controller.getActivitiesDateRange);

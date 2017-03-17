@@ -36,9 +36,7 @@ module.exports = exports = {
             userId = profile.id;
 
             process.nextTick(function() {
-                var promise = User.findById({
-                    _id: userId
-                }).exec();
+                var promise = User.findById({_id: userId}).exec();
                 promise.then(function(foundUser) {
                     if (foundUser) {
                         done(null, foundUser);
@@ -64,6 +62,28 @@ module.exports = exports = {
     sendBrokenResponse: function(req, res, next) {
         console.log('gets to the broken response');
         res.sendStatus(200);
+    },
+
+    refreshAccessToken: function(req, res){
+        var userId = req.body.userId;
+        var accessToken = req.body.accessToken;
+        var refreshToken = req.body.refreshToken;
+        var expiresInSeconds = 3600;
+        var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
+        
+        var promise = User.findById({_id: id}).exec();
+        promise.then(function(user) {
+            client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function(result) {
+                //save access token and refresh token for user
+                //result.access_token & result.refresh_token
+            
+                user.accessToken = result.access_token;
+                user.refreshToken = result.refresh_token;
+            })
+        .then(function(user){
+            saveInPromise(user);
+        })    
+        .done();
     },
 
     getOauthToken: function(req, res, next) {
@@ -159,9 +179,7 @@ module.exports = exports = {
         var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
         var dateCreated;
 
-        var promise = User.findById({
-            _id: id
-        }).exec();
+        var promise = User.findById({_id: id}).exec();
 
         promise.then(function(user) {
           if (accessToken && refreshToken) {
@@ -218,150 +236,7 @@ module.exports = exports = {
           .then(function(results) {
             console.log(results);
           });
-                /*
-                // GET PROFILE DATA
-                return client.get('/profile.json', user.accessToken).then(function(results) {
-                    var profile = results[0];
-                    //console.log("in get profile data");
-                    //console.log(profile);
-                    user.profile.avatar = profile.user.avatar;
-                    user.provider = 'fitbit';
-                    user.profile.displayName = profile.user.displayName;
-                    return user;
-                });
-            })
-            .then(function(user) {
-                // GET FRIEND DATA
-                //return client.requestResource('/friends.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get('/friends.json', user.accessToken).then(function(results) {
-                    var currentFriends = user.friends;
-                    var friends = results[0].friends;
-                    //console.log('in get friend data');
-                    //console.log(friends);
-                    var fitbitFriends = [];
-                    for (var i = 0; i < friends.length; i++) {
-                        fitbitFriends.push(friends[i].user.encodedId);
-                    }
-                    // get unique friends
-                    for (var i = 0; i < currentFriends.length; i++) {
-                        if (fitbitFriends.indexOf(currentFriends[i]) < 0) {
-                            fitbitFriends.push(currentFriends[i]);
-                        }
-                    }
-                    user.friends = fitbitFriends;
-                    return user;
-                });
-            })
-            .then(function(user) {
-                // GET ACTUAL STEPS, NOT LOGGED ONES
-                //return client.requestResource('/activities/tracker/steps/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get('/activities/tracker/steps/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-                    user.attributes.experience = user.attributes.experience || 0;
-                    var activities_tracker_steps = results[0]['activities-tracker-steps'];
-                    //console.log('in get actual steps');
-                    //console.log(activities_tracker_steps);
-                    user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
-                    var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
-                    user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
-                    user.attributes.level = level;
-                    return user;
-                });
-            })
-            .then(function(user) {
-                // GET SLEEP MINUTES AND CONVERT TO VITALITY
-                //return client.requestResource('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get('/sleep/minutesAsleep/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-                    var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
-                    //console.log('in get minutes asleep');
-                    //console.log(sleep_minutesAsleep);
-                    user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
-                    return user;
-                });
-            })
-            // GET DISTANCE AND CONVERT TO ENDURANCE
-            .then(function(user) {
-                //return client.requestResource('/activities/tracker/distance/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get('/activities/tracker/distance/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-                    console.log('in get distance');
-                    //console.log(results);
-                    var activities_tracker_distance = results[0]['activities-tracker-distance'];
-                    //console.log(activities_tracker_distance);
-                    user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
-                    return user;
-                });
-            })
-            // GET VERY ACTIVE MINUTES AND CONVERT TO ATTACK BONUS
-            .then(function(user) {
-                //return client.requestResource('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get('/activities/minutesVeryActive/date/' + dateCreated + '/today.json', user.accessToken).then(function(results) {
-                    console.log('in get minutes very active');
-                    //console.log(results);
-                    var activities_minutesVeryActive = results[0]['activities-minutesVeryActive'];
-                    //console.log(activities_minutesVeryActive);
-                    user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
-                    return user;
-                });
-            })
-            .then(function(user) {
-                // GET TIME ASLEEP FROM LAST CHECK AND USE IT TO CALC SLEEP HP RECOVERY, THIS NUMBER ONLY USED ONCE
-                var HPChecker = user.HPChecker;
-                var today = (new Date()).yyyymmdd();
-                var dateLastChecked = HPChecker.dateLastChecked || user.createdAt;
-                var hpLastChecked = dateLastChecked.yyyymmdd();
-                // if we didn't check yet before today, we reset foundSleep to false
-                if (hpLastChecked !== today) {
-                    HPChecker.foundSleep = false;
-                }
-                // if it's true and the dates do match then we don't do anything bc we've found sleep today
-                if (hpLastChecked === today && HPChecker.foundSleep === true) {
-                    return user;
-                }
-                user.HPChecker.dateLastChecked = new Date(); //set the new lastchecked date to today
-                var hpURL = '/sleep/minutesAsleep/date/' + hpLastChecked + '/today.json';
-                //return client.requestResource(hpURL, 'GET', user.accessToken, user.accessTokenSecret).then(function(results) {
-                return client.get(hpURL, user.accessToken).then(function(results) {
-                    var sleep_minutesAsleep = results[0]['sleep-minutesAsleep'];
-                    //console.log('in get asleep from last check');
-                    //console.log(sleep_minutesAsleep);
-                    user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
-                    if (user.fitbit.HPRecov > 0) {
-                        user.HPChecker.foundSleep = true;
-                    }
-                    return user;
-                });
-            })
-            .then(function(user) {
-                // GET WORKOUTS AND CALCULATE THEM TO BE DEXTERITY/STRENGTH
-                var lastChecked = user.stringLastChecked || user.createdAt.subtractDays(1);
-                var yesterday = (new Date()).subtractDays(1);
-                var datesArr = getDatesArray(new Date(lastChecked), yesterday);
-                if (yesterday.yyyymmdd() === lastChecked) {
-                    return user;
-                }
-                var answerPromises = [];
-                var num = datesArr.length - 7 > 0 ? datesArr.length - 7 : 0; //only check the last 7 days
-                user.stringLastChecked = datesArr[datesArr.length - 1]; //this importantly sets our last checked variable
-                for (var i = datesArr.length - 1; i >= num; i--) {
-                    //var a = client.requestResource('/activities/date/' + datesArr[i] + '.json', 'GET', user.accessToken, user.accessTokenSecret);
-                    var a = client.get('/activities/date/' + datesArr[i] + '.json', user.accessToken);
-
-                    answerPromises.push(a);
-                }
-                return Q.all(answerPromises)
-                    .then(function(results) {
-                        var dexterity = 0;
-                        var strength = 0;
-                        for (var i = 0; i < results.length; i++) {
-                            var activities_workouts = results[i][0]['activities'];
-                            //console.log('in get workouts');
-                            //console.log(activities_workouts);
-                            dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
-                            strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
-                        }
-                        user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
-                        user.fitbit.strength = user.fitbit.strength + strength;
-                        return user;
-                    });*/
+                
             })
             .then(function(user) {
                 return saveInPromise(user);
@@ -372,16 +247,6 @@ module.exports = exports = {
                 //TODO chance refresh token stuff
             })
             .done();
-
-        // get inactive minutes - we do nothing with this right now
-        // client.requestResource('/activities/minutesSedentary/date/'+date+'/today.json','GET',fitbitToken,fitbitSecret).then(function(results){
-        //   User.findById(id,function(err,user) {
-        //     if (err) {throw err};
-        //     user.fitbit.inactiveMinutes = JSON.parse(results[0])['activities-minutesSedentary'];
-        //     user.save();
-        //   });
-        // });
-
     },
 
     getActivitiesDateRange: function(req, res, next) {
