@@ -64,13 +64,21 @@ module.exports = exports = {
         res.sendStatus(200);
     },
 
-    refreshAccessToken: function(req, res){
-        console.log("refreshAccessToken() start");
-        var id = req.body.userId;
-        console.log("userId: " + userId);
+    setupRefresh:function(req, res){
+        var id = req.params.userId;
         var accessToken = req.body.accessToken;
-        console.log("accessToken: " + accessToken);
         var refreshToken = req.body.refreshToken;
+        exports.refreshAccessToken(id, accessToken, refreshToken);
+        res.sendStatus(200);
+    },
+    
+    refreshAccessToken: function(id, accessToken, refreshToken){
+        console.log("refreshAccessToken() start");
+        //var id = req.body.userId;
+        console.log("userId: " + id);
+        //var accessToken = req.body.accessToken;
+        console.log("accessToken: " + accessToken);
+        //var refreshToken = req.body.refreshToken;
         console.log("refreshToken: " + refreshToken);
         var expiresInSeconds = 3600;
         var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
