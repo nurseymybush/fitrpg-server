@@ -15,7 +15,7 @@
     "express": "4.14.0",
     "express-jwt": "5.1.0",
     "express-session": "1.14.0",
-    "fitbit-node": "2.0.0",
+    "fitbit-node": "2.0.5",
     "formidable": "1.0.17",
     "jawbone-up": "0.1.2",
     "jsonwebtoken": "7.1.6",

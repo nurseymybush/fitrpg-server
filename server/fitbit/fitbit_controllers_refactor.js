@@ -77,10 +77,11 @@ module.exports = exports = {
         
         var promise = User.findById({_id: id}).exec();
         promise.then(function(user) {
-            client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function(result) {
+            return client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function(result) {
                 //save access token and refresh token for user
                 //result.access_token & result.refresh_token
                 console.log("client.refreshAccessToken()");
+                console.log("result: " + JSON.stringify(result));
                 user.accessToken = result.access_token;
                 console.log("new accessToken: " + user.accessToken);
                 user.refreshToken = result.refresh_token;
