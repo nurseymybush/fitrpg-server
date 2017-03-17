@@ -66,32 +66,35 @@ module.exports = exports = {
 
     setupRefresh:function(req, res){
         var id = req.body.userId;
-        console.log("userId: " + id);
+        //console.log("userId: " + id);
 
         var accessToken = req.body.accessToken;
-        console.log("accessToken: " + accessToken);
+        //console.log("accessToken: " + accessToken);
 
         var refreshToken = req.body.refreshToken;
-        console.log("refreshToken: " + refreshToken);
+        //console.log("refreshToken: " + refreshToken);
 
         exports.refreshAccessToken(id, accessToken, refreshToken);
         res.sendStatus(200);
     },
 
     refreshAccessToken: function(id, accessToken, refreshToken){
-        //console.log("refreshAccessToken() start");
+        console.log("refreshAccessToken() start");
         //var id = req.body.userId;
-        //console.log("userId: " + id);
+        console.log("userId: " + id);
         //var accessToken = req.body.accessToken;
-        //console.log("accessToken: " + accessToken);
+        console.log("accessToken: " + accessToken);
         //var refreshToken = req.body.refreshToken;
-        //console.log("refreshToken: " + refreshToken);
+        console.log("refreshToken: " + refreshToken);
         var expiresInSeconds = 3600;
         var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
-        
+        console.log("refreshAccessToken() 1");
         var promise = User.findById({_id: id}).exec();
+        console.log("refreshAccessToken() 2");
         promise.then(function(user) {
+            console.log("refreshAccessToken() 3");
             return client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function(result) {
+                console.log("refreshAccessToken() 4");
                 //save access token and refresh token for user
                 //result.access_token & result.refresh_token
                 console.log("client.refreshAccessToken()");
