@@ -85,7 +85,9 @@ module.exports = exports = {
                 console.log("new accessToken: " + user.accessToken);
                 user.refreshToken = result.refresh_token;
                 console.log("new refreshToken: " + user.refreshToken);
-            })
+                return user;
+            });
+        })
         .then(function(user){
             console.log("save user object");
             saveInPromise(user);
