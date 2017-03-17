@@ -66,7 +66,7 @@ module.exports = exports = {
 
     refreshAccessToken: function(req, res){
         console.log("refreshAccessToken() start");
-        var userId = req.body.userId;
+        var id = req.body.userId;
         console.log("userId: " + userId);
         var accessToken = req.body.accessToken;
         console.log("accessToken: " + accessToken);
