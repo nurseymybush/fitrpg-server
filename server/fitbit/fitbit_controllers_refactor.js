@@ -65,7 +65,7 @@ module.exports = exports = {
     },
 
     setupRefresh:function(req, res){
-        var id = req.params.userId;
+        var id = req.body.userId;
         var accessToken = req.body.accessToken;
         var refreshToken = req.body.refreshToken;
         exports.refreshAccessToken(id, accessToken, refreshToken);
