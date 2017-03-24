@@ -87,16 +87,18 @@ module.exports = exports = {
         //var refreshToken = req.body.refreshToken;
         console.log("refreshToken: " + refreshToken);
         var expiresInSeconds = 3600;
-        var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
         console.log("refreshAccessToken() 1");
         var promise = User.findById({_id: id}).exec();
         console.log("refreshAccessToken() 2");
         promise.then(function(user) {
+            var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
+
             //console.log("printing user");
             //console.log(user); //prints correctly
             console.log("refreshAccessToken() 3");
             console.log("printing client");
             console.log(JSON.stringify(client));
+
             return client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function(result) {
                 console.log("refreshAccessToken() 4");
                 //save access token and refresh token for user
@@ -108,6 +110,11 @@ module.exports = exports = {
                 user.refreshToken = result.refresh_token;
                 console.log("new refreshToken: " + user.refreshToken);
                 return user;
+            })
+            .fail(function (error) {
+                console.log("refreshAccessToken() 5");
+                console.log("error printed below");
+                console.log(JSON.stringify(error));
             });
         })
         .then(function(user){
