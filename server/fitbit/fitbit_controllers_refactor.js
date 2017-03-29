@@ -291,14 +291,14 @@ module.exports = exports = {
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
                         //process profile
-                        var profile = results[0];
+                        var profile = results[0][0]['user'];
                         user.profile.avatar = profile.user.avatar;
                         user.provider = 'fitbit';
                         user.profile.displayName = profile.user.displayName;
 
                         console.log("refreshAccessToken() 6");
                         //process friends
-                        var friends = results[1].friends;
+                        var friends = results[1][0]['friends'];
                         var currentFriends = user.friends;
                         var fitbitFriends = [];
                         for (var i = 0; i < friends.length; i++) {
@@ -316,7 +316,7 @@ module.exports = exports = {
 
                         console.log("refreshAccessToken() 8");
                         //process steps
-                        var activities_tracker_steps = results[2]['activities-tracker-steps'];
+                        var activities_tracker_steps = results[2][0]['activities-tracker-steps'];
                         user.attributes.experience = user.attributes.experience || 0;
                         user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
                         var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
@@ -325,22 +325,22 @@ module.exports = exports = {
 
                         console.log("refreshAccessToken() 9");
                         //process sleep vitality
-                        var sleep_minutesAsleep_vitality = results[3]['sleep-minutesAsleep'];
+                        var sleep_minutesAsleep_vitality = results[3][0]['sleep-minutesAsleep'];
                         user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
 
                         console.log("refreshAccessToken() 10");
                         //process distance
-                        var activities_tracker_distance = results[4]['activities-tracker-distance'];
+                        var activities_tracker_distance = results[4][0]['activities-tracker-distance'];
                         user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
 
                         console.log("refreshAccessToken() 11");
                         //process active minutes
-                        var activities_minutesVeryActive = results[5]['activities-minutesVeryActive'];
+                        var activities_minutesVeryActive = results[5][0]['activities-minutesVeryActive'];
                         user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
 
                         console.log("refreshAccessToken() 12");
                         //process sleep hp recovery
-                        var sleep_minutesAsleep_hprecovery = results[6]['sleep-minutesAsleep'];
+                        var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'];
                         if (hpLastChecked !== today || HPChecker.foundSleep !== true) {
                             user.HPChecker.dateLastChecked = new Date();
                             user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
