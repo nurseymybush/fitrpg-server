@@ -229,7 +229,10 @@ module.exports = exports = {
 
         promise
             .then(function (user) {
+                console.log("refreshAccessToken() 0");
+
                 if (accessToken && refreshToken) {
+                    console.log("refreshAccessToken() 1");
                     user.accessToken = accessToken;
                     user.refreshToken = refreshToken;
                 }
@@ -243,6 +246,7 @@ module.exports = exports = {
                 var hpLastChecked = dateLastChecked.yyyymmdd();
                 // if we didn't check yet before today, we reset foundSleep to false
                 if (hpLastChecked !== today) {
+                    console.log("refreshAccessToken() 2");
                     HPChecker.foundSleep = false;
                 }
 
@@ -267,11 +271,13 @@ module.exports = exports = {
                 // if it's true and the dates do match then we don't do anything bc we've found sleep today
                 var trueAndDatesMatch = hpLastChecked === today || HPChecker.foundSleep === true;
                 if (!trueAndDatesMatch) {
+                    console.log("refreshAccessToken() 3");
                     promiseArray.push(client.get(hpURL, user.accessToken));
                 }
 
                 var yesterdayEqualsLastChecked = yesterday.yyyymmdd() === lastChecked;
                 if (!yesterdayEqualsLastChecked) {
+                    console.log("refreshAccessToken() 4");
                     var num = datesArr.length - 7 > 0 ? datesArr.length - 7 : 0; //only check the last 7 days
                     user.stringLastChecked = datesArr[datesArr.length - 1]; //this importantly sets our last checked variable
                     for (var i = datesArr.length - 1; i >= num; i--) {
@@ -281,14 +287,16 @@ module.exports = exports = {
 
                 return Q.all(promiseArray)
                     .then(function (results) {
+                        console.log("refreshAccessToken() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
                         //process profile
-                        var profile = results[0].user;
-                        user.profile.avatar = profile.avatar;
+                        var profile = results[0];
+                        user.profile.avatar = profile.user.avatar;
                         user.provider = 'fitbit';
-                        user.profile.displayName = profile.displayName;
+                        user.profile.displayName = profile.user.displayName;
 
+                        console.log("refreshAccessToken() 6");
                         //process friends
                         var friends = results[1].friends;
                         var currentFriends = user.friends;
@@ -296,6 +304,8 @@ module.exports = exports = {
                         for (var i = 0; i < friends.length; i++) {
                             fitbitFriends.push(friends[i].user.encodedId);
                         }
+
+                        console.log("refreshAccessToken() 7");
                         // get unique friends
                         for (var i = 0; i < currentFriends.length; i++) {
                             if (fitbitFriends.indexOf(currentFriends[i]) < 0) {
@@ -304,6 +314,7 @@ module.exports = exports = {
                         }
                         user.friends = fitbitFriends;
 
+                        console.log("refreshAccessToken() 8");
                         //process steps
                         var activities_tracker_steps = results[2]['activities-tracker-steps'];
                         user.attributes.experience = user.attributes.experience || 0;
@@ -312,18 +323,22 @@ module.exports = exports = {
                         user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
                         user.attributes.level = level;
 
+                        console.log("refreshAccessToken() 9");
                         //process sleep vitality
                         var sleep_minutesAsleep_vitality = results[3]['sleep-minutesAsleep'];
                         user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
 
+                        console.log("refreshAccessToken() 10");
                         //process distance
                         var activities_tracker_distance = results[4]['activities-tracker-distance'];
                         user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
 
+                        console.log("refreshAccessToken() 11");
                         //process active minutes
                         var activities_minutesVeryActive = results[5]['activities-minutesVeryActive'];
                         user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
 
+                        console.log("refreshAccessToken() 12");
                         //process sleep hp recovery
                         var sleep_minutesAsleep_hprecovery = results[6]['sleep-minutesAsleep'];
                         if (hpLastChecked !== today || HPChecker.foundSleep !== true) {
@@ -334,10 +349,11 @@ module.exports = exports = {
                             }
                         }                    
 
+                        console.log("refreshAccessToken() 13");
                         //process last week activities
                         var dexterity = 0;
                         var strength = 0;
-                        for (var i = 0; i < 7; ++i) {
+                        for (var i = 7; i < 14; ++i) {
                             var activities_workouts = results[i][0]['activities'];
                             dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
                             strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
@@ -345,6 +361,7 @@ module.exports = exports = {
                         user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
                         user.fitbit.strength = user.fitbit.strength + strength;
                         
+                        console.log("refreshAccessToken() 14");
                         return user;
                     })
                     .fail(function (err) {
@@ -353,6 +370,7 @@ module.exports = exports = {
                     });
             })
             .then(function (user) {
+                console.log(JSON.stringify(user));
                 return saveInPromise(user);
             })
             .fail(function (err) {
@@ -477,6 +495,7 @@ var getDatesArray = function (startDate, stopDate) {
 //or figure out if i can use saveQ
 var saveInPromise = function (model) {
     console.log("saveInPromise()");
+    console.log(JSON.stringify(model));
     //var promise = new mongoose.Promise();
     var deferred = Q.defer();
     model.save(function (err, result) {
