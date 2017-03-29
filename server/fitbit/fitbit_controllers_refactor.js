@@ -292,9 +292,9 @@ module.exports = exports = {
 
                         //process profile
                         var profile = results[0][0]['user'];
-                        user.profile.avatar = profile.user.avatar;
+                        user.profile.avatar = profile.avatar;
                         user.provider = 'fitbit';
-                        user.profile.displayName = profile.user.displayName;
+                        user.profile.displayName = profile.displayName;
 
                         console.log("refreshAccessToken() 6");
                         //process friends
