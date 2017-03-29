@@ -326,7 +326,7 @@ module.exports = exports = {
                         console.log("refreshAccessToken() 9");
                         //process sleep vitality
                         var sleep_minutesAsleep_vitality = results[3][0]['sleep-minutesAsleep'];
-                        user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep);
+                        user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep_vitality);
 
                         console.log("refreshAccessToken() 10");
                         //process distance
@@ -343,7 +343,7 @@ module.exports = exports = {
                         var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'];
                         if (hpLastChecked !== today || HPChecker.foundSleep !== true) {
                             user.HPChecker.dateLastChecked = new Date();
-                            user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep);
+                            user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep_hprecovery);
                             if (user.fitbit.HPRecov > 0) {
                                 user.HPChecker.foundSleep = true;
                             }
