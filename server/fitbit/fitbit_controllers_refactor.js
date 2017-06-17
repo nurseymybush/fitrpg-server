@@ -287,6 +287,8 @@ module.exports = exports = {
 
                 return Q.all(promiseArray)
                     .then(function (results) {
+                        console.log("Logging Results:");
+                        console.log(results);
                         //console.log("refreshAccessToken() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
@@ -340,8 +342,9 @@ module.exports = exports = {
 
                         //console.log("refreshAccessToken() 12");
                         //process sleep hp recovery
-                        var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'];
-                        if (hpLastChecked !== today || HPChecker.foundSleep !== true) {
+                        var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'] !== "undefined" ? results[6][0]['sleep-minutesAsleep'] : null;
+                        if ((hpLastChecked !== today || HPChecker.foundSleep !== true) && sleep_minutesAsleep_hprecovery) {
+                            console.log("refreshAccessToken() 12.5");
                             user.HPChecker.dateLastChecked = new Date();
                             user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep_hprecovery);
                             if (user.fitbit.HPRecov > 0) {
