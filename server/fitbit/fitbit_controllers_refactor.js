@@ -68,13 +68,13 @@ module.exports = exports = {
 
     setupRefresh: function (req, res) {
         var id = req.body.userId;
-        //console.log("userId: " + id);
+        console.log("setupRefresh: userId: " + id);
 
         var accessToken = req.body.accessToken;
-        //console.log("accessToken: " + accessToken);
+        console.log("setupRefresh: accessToken: " + accessToken);
 
         var refreshToken = req.body.refreshToken;
-        //console.log("refreshToken: " + refreshToken);
+        console.log("setupRefresh: refreshToken: " + refreshToken);
 
         exports.refreshAccessToken(id, accessToken, refreshToken);
         res.sendStatus(200);
