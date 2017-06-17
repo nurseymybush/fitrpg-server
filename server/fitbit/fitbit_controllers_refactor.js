@@ -34,7 +34,12 @@ module.exports = exports = {
         function (accessToken, refreshToken, profile, done) {
             var timestamp = new Date();
             userId = profile.id;
-
+            
+            console.log("fitbitStrategy()");
+            console.log("fitbitStrategy() accessToken: " + accessToken);
+            console.log("fitbitStrategy() refreshToken: " + refreshToken);
+            console.log("fitbitStrategy() profile: " + profile);
+            
             process.nextTick(function () {
                 var promise = User.findById({
                     _id: userId
@@ -53,11 +58,18 @@ module.exports = exports = {
                         exports.subscribeUser(accessToken, refreshToken, userId);
                         return saveInPromise(currentUser);
                     }
-                }).then(function () {
+                })
+                .then(function () {
                     // re-logging in changes the token and secret, so in any case we must update it
                     // the second parameter is null because it expects a potential callback
                     return exports.getAllData(userId, null, accessToken, refreshToken);
-                }).fail(function (err) {}).done();
+                })
+                .fail(function (err) {
+                    console.log("fitbitStrategy()");
+                    console.log("Eror printed below:");
+                    console.log(JSON.stringify(err));
+                })
+                .done();
             });
         }),
 
@@ -159,11 +171,14 @@ module.exports = exports = {
         var accessTokenMatches = false;
         //find the user in the DB
         var fitbitAccessToken = req.body.fitbitAccessToken;
+        console.log("validateUserToken() fitbitAccessToken: " + fitbitAccessToken);
         var userId = req.body.userId;
+        console.log("validateUserToken() userId: " + userId);
 
         var promise = User.findById({
             _id: userId
         }).exec();
+
         promise.then(function (foundUser) {
                 if (foundUser) {
                     //if the accessToken for the found user equals the accessToken passed
@@ -175,7 +190,9 @@ module.exports = exports = {
                 res.send("" + accessTokenMatches);
             })
             .fail(function (err) {
-                console.log(err);
+                console.log("validateUserToken() promise.fail()");
+                console.log("error printed below")
+                console.log(JSON.stringify(err));
             })
             .done();
     },
