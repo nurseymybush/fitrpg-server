@@ -167,7 +167,7 @@ module.exports = exports = {
         console.log("getOauthToken() userToken: " + userToken);
         console.log("getOauthToken() server_token: " + server_token);
         console.log("getOauthToken() userId: " + userId);
-        
+
         res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
     },
 
@@ -250,6 +250,9 @@ module.exports = exports = {
     },
 
     retrieveData: function (req, res, next) {
+        console.log('retreiveData() req.params:');
+        console.log(JSON.stringify(req.params));
+        
         var id = req.params.id;
         console.log("retreiveData() id: " + id);
         exports.getAllData(id);
