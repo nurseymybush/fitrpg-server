@@ -38,7 +38,8 @@ module.exports = exports = {
             console.log("fitbitStrategy()");
             console.log("fitbitStrategy() accessToken: " + accessToken);
             console.log("fitbitStrategy() refreshToken: " + refreshToken);
-            console.log("fitbitStrategy() profile: " + profile);
+            console.log("fitbitStrategy() profile:");
+            console.log(JSON.stringify(profile));
             
             process.nextTick(function () {
                 var promise = User.findById({
@@ -150,7 +151,10 @@ module.exports = exports = {
     getOauthToken: function (req, res, next) {
         console.log('getOauthToken() req.query:');
         console.log(JSON.stringify(req.query));
-        var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
+        //this looks like {"code":"51ad51ce2426860680cb323117373ea926469438"}
+        
+        //var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
+        var userToken = req.query['code'];//changed to this based on console.log
 
         var server_token = jwt.sign({
                 id: userId
@@ -161,6 +165,9 @@ module.exports = exports = {
             }
         );
         console.log("getOauthToken() userToken: " + userToken);
+        console.log("getOauthToken() server_token: " + server_token);
+        console.log("getOauthToken() userId: " + userId);
+        
         res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
     },
 
