@@ -251,8 +251,8 @@ module.exports = exports = {
 
     retrieveData: function (req, res, next) {
         console.log('retreiveData() req.params:');
-        console.log(JSON.stringify(req.params));
-        
+        console.log(JSON.stringify(req.params));//looks like {"id":"3KJZG4"}
+
         var id = req.params.id;
         console.log("retreiveData() id: " + id);
         exports.getAllData(id);
@@ -261,8 +261,8 @@ module.exports = exports = {
 
     getAllData: function (id, cb, accessToken, refreshToken) {
         console.log("getAllData() id: " + id);
-        console.log("getAllData() accessToken: " + accessToken);
-        console.log("getAllData() refreshToken: " + refreshToken);
+        console.log("getAllData() accessToken: " + accessToken);//this isnt even sent
+        console.log("getAllData() refreshToken: " + refreshToken);//this isnt even sent
 
         var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
         var dateCreated;
@@ -386,7 +386,9 @@ module.exports = exports = {
 
                         console.log("getAllData() 12");
                         //process sleep hp recovery
+                        if(results[6]){
                         var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'] !== "undefined" ? results[6][0]['sleep-minutesAsleep'] : null;
+                        console.log('sleep_minutesAsleep_hprecovery: ' + sleep_minutesAsleep_hprecovery);
                         if ((hpLastChecked !== today || HPChecker.foundSleep !== true) && sleep_minutesAsleep_hprecovery) {
                             console.log("getAllData() 12.5");
                             user.HPChecker.dateLastChecked = new Date();
@@ -394,6 +396,9 @@ module.exports = exports = {
                             if (user.fitbit.HPRecov > 0) {
                                 user.HPChecker.foundSleep = true;
                             }
+                        }
+                        } else {
+                            console.log("getAllData() no results[6]");
                         }                    
 
                         console.log("getAllData() 13");
@@ -401,6 +406,7 @@ module.exports = exports = {
                         var dexterity = 0;
                         var strength = 0;
                         //for (var i = 7; i < 14; ++i) {
+                        if(results[7]){
                             var activities_workouts = results[7][0]['activities'];
                             //var activities_workouts = results[i][0]['activities']; //getting an error here because it is empty array
                             dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
@@ -408,6 +414,9 @@ module.exports = exports = {
                         //}
                         user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
                         user.fitbit.strength = user.fitbit.strength + strength;
+                        } else {
+                            console.log("getAllData() no results[7]");
+                        }
                         
                         console.log("getAllData() 14");
                         return user;
