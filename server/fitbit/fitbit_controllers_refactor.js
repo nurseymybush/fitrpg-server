@@ -148,6 +148,8 @@ module.exports = exports = {
     },
 
     getOauthToken: function (req, res, next) {
+        console.log('getOauthToken() req.query:');
+        console.log(JSON.stringify(req.query));
         var userToken = req.query['oauth_token']; //remember the user should save this, db needs do nothing with it
 
         var server_token = jwt.sign({
