@@ -158,6 +158,7 @@ module.exports = exports = {
                 expiresIn: "1h" //1 hour to test refreshTokens
             }
         );
+        console.log("getOauthToken() userToken: " + userToken);
         res.redirect('?oauth_token=' + server_token + '&userId=' + userId); //this should never be viewed by the user, just ending the res, change to res.end later
     },
 
@@ -181,6 +182,7 @@ module.exports = exports = {
 
         promise.then(function (foundUser) {
                 if (foundUser) {
+                    console.log("validateUserToken() promise.then() foundUser: " + JSON.stringify(foundUser));
                     //if the accessToken for the found user equals the accessToken passed
                     if (foundUser.accessToken === fitbitAccessToken) {
                         accessTokenMatches = true;
@@ -228,6 +230,9 @@ module.exports = exports = {
     // typically, this window should never be seen and just automatically closed,
     // but in the cases where the closing window doesn't work, this provides a manual way to do itd
     finishLogin: function (req, res, next) {
+        console.log("finishLogin() oauth_token: " + req.query['oauth_token']);
+        console.log("finishLogin() userId: " + req.query['userId']);
+
         if (req.query['oauth_token'] && req.query['userId']) {
             res.sendFile(path.resolve('./static/loggedIn.html'));
         } else {
@@ -237,11 +242,16 @@ module.exports = exports = {
 
     retrieveData: function (req, res, next) {
         var id = req.params.id;
+        console.log("retreiveData() id: " + id);
         exports.getAllData(id);
         res.sendStatus(200);
     },
 
     getAllData: function (id, cb, accessToken, refreshToken) {
+        console.log("getAllData() id: " + id);
+        console.log("getAllData() accessToken: " + accessToken);
+        console.log("getAllData() refreshToken: " + refreshToken);
+
         var client = new FitbitApiClient(FITBIT_CONSUMER_KEY, FITBIT_CONSUMER_SECRET);
         var dateCreated;
 
