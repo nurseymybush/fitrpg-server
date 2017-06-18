@@ -21,9 +21,10 @@ module.exports = exports = function(router, passport) {
     .post(controller.pushNotification);
 
   /* Will later have to move the following route once we have jawbone data as well */
-  //router.route('/refresh/:id')
+  router.route('/refresh/:id')//chance uncomment 6-18-17 because the id is undefined in fitbitcontroller
+  .get(controller.setupRefresh);
     //.get(controller.retrieveData);//chance change this 3-16-17
-    router.use('/refresh',controller.setupRefresh);
+    //router.use('/refresh',controller.setupRefresh);
     //.get(controller.refreshAccessToken);
 
   router.route('/daterange/:id/:type/:activity/:startDate/:endDate')

@@ -128,7 +128,7 @@ module.exports = exports = {
                 return user;
             })
             .fail(function (error) {
-                console.log("refreshAccessToken() 5");
+                console.log("refreshAccessToken() client.refreshAccessToken()");
                 console.log("error printed below");
                 console.log(JSON.stringify(error));
             });
@@ -138,7 +138,7 @@ module.exports = exports = {
             saveInPromise(user);
         })
         .fail(function (error) {
-            console.log("refreshAccessToken() 6");
+            console.log("refreshAccessToken() promise.then()");
             console.log("error printed below");
             console.log(JSON.stringify(error));
         })
@@ -261,10 +261,10 @@ module.exports = exports = {
 
         promise
             .then(function (user) {
-                console.log("refreshAccessToken() 0");
+                console.log("getAllData() 0");
 
                 if (accessToken && refreshToken) {
-                    console.log("refreshAccessToken() 1");
+                    console.log("getAllData() 1");
                     user.accessToken = accessToken;
                     user.refreshToken = refreshToken;
                 }
@@ -278,7 +278,7 @@ module.exports = exports = {
                 var hpLastChecked = dateLastChecked.yyyymmdd();
                 // if we didn't check yet before today, we reset foundSleep to false
                 if (hpLastChecked !== today) {
-                    console.log("refreshAccessToken() 2");
+                    console.log("getAllData() 2");
                     HPChecker.foundSleep = false;
                 }
 
@@ -303,13 +303,13 @@ module.exports = exports = {
                 // if it's true and the dates do match then we don't do anything bc we've found sleep today
                 var trueAndDatesMatch = hpLastChecked === today || HPChecker.foundSleep === true;
                 if (!trueAndDatesMatch) {
-                    console.log("refreshAccessToken() 3");
+                    console.log("getAllData() 3");
                     promiseArray.push(client.get(hpURL, user.accessToken));
                 }
 
                 var yesterdayEqualsLastChecked = yesterday.yyyymmdd() === lastChecked;
                 if (!yesterdayEqualsLastChecked) {
-                    console.log("refreshAccessToken() 4");
+                    console.log("getAllData() 4");
                     var num = datesArr.length - 7 > 0 ? datesArr.length - 7 : 0; //only check the last 7 days
                     user.stringLastChecked = datesArr[datesArr.length - 1]; //this importantly sets our last checked variable
                     for (var i = datesArr.length - 1; i >= num; i--) {
@@ -321,7 +321,7 @@ module.exports = exports = {
                     .then(function (results) {
                         console.log("Logging Results:");
                         console.log(results);
-                        console.log("refreshAccessToken() 5");
+                        console.log("getAllData() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
                         //process profile
@@ -330,7 +330,7 @@ module.exports = exports = {
                         user.provider = 'fitbit';
                         user.profile.displayName = profile.displayName;
 
-                        console.log("refreshAccessToken() 6");
+                        console.log("getAllData() 6");
                         //process friends
                         var friends = results[1][0]['friends'];
                         var currentFriends = user.friends;
@@ -339,7 +339,7 @@ module.exports = exports = {
                             fitbitFriends.push(friends[i].user.encodedId);
                         }
 
-                        console.log("refreshAccessToken() 7");
+                        console.log("getAllData() 7");
                         // get unique friends
                         for (var i = 0; i < currentFriends.length; i++) {
                             if (fitbitFriends.indexOf(currentFriends[i]) < 0) {
@@ -348,7 +348,7 @@ module.exports = exports = {
                         }
                         user.friends = fitbitFriends;
 
-                        console.log("refreshAccessToken() 8");
+                        console.log("getAllData() 8");
                         //process steps
                         var activities_tracker_steps = results[2][0]['activities-tracker-steps'];
                         user.attributes.experience = user.attributes.experience || 0;
@@ -357,26 +357,26 @@ module.exports = exports = {
                         user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
                         user.attributes.level = level;
 
-                        console.log("refreshAccessToken() 9");
+                        console.log("getAllData() 9");
                         //process sleep vitality
                         var sleep_minutesAsleep_vitality = results[3][0]['sleep-minutesAsleep'];
                         user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep_vitality);
 
-                        console.log("refreshAccessToken() 10");
+                        console.log("getAllData() 10");
                         //process distance
                         var activities_tracker_distance = results[4][0]['activities-tracker-distance'];
                         user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
 
-                        console.log("refreshAccessToken() 11");
+                        console.log("getAllData() 11");
                         //process active minutes
                         var activities_minutesVeryActive = results[5][0]['activities-minutesVeryActive'];
                         user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
 
-                        console.log("refreshAccessToken() 12");
+                        console.log("getAllData() 12");
                         //process sleep hp recovery
                         var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'] !== "undefined" ? results[6][0]['sleep-minutesAsleep'] : null;
                         if ((hpLastChecked !== today || HPChecker.foundSleep !== true) && sleep_minutesAsleep_hprecovery) {
-                            console.log("refreshAccessToken() 12.5");
+                            console.log("getAllData() 12.5");
                             user.HPChecker.dateLastChecked = new Date();
                             user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep_hprecovery);
                             if (user.fitbit.HPRecov > 0) {
@@ -384,7 +384,7 @@ module.exports = exports = {
                             }
                         }                    
 
-                        console.log("refreshAccessToken() 13");
+                        console.log("getAllData() 13");
                         //process last week activities
                         var dexterity = 0;
                         var strength = 0;
@@ -397,11 +397,11 @@ module.exports = exports = {
                         user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
                         user.fitbit.strength = user.fitbit.strength + strength;
                         
-                        console.log("refreshAccessToken() 14");
+                        console.log("getAllData() 14");
                         return user;
                     })
                     .fail(function (err) {
-                        console.log("Q.all fail");
+                        console.log("getAllData() Q.all fail");
                         console.log(err);
                     });
             })
