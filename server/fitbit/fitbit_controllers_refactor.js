@@ -239,6 +239,8 @@ module.exports = exports = {
     // typically, this window should never be seen and just automatically closed,
     // but in the cases where the closing window doesn't work, this provides a manual way to do itd
     finishLogin: function (req, res, next) {
+        console.log("finishLogin() req.query:");
+        console.log(JSON.stringify(req.query));
         console.log("finishLogin() oauth_token: " + req.query['oauth_token']);
         console.log("finishLogin() userId: " + req.query['userId']);
 
