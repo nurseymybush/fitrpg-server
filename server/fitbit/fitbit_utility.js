@@ -90,7 +90,7 @@ exports.util = {
   },
 
   calcSkillPoints: function(currSkillPts, lvl, currLvl) {
-    return currSkillPts + (lvl-currLvl)*5;
+    return currSkillPts + (lvl-currLvl)*1;
   }
 
 }
