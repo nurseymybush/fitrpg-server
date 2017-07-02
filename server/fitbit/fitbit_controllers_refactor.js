@@ -139,7 +139,7 @@ module.exports = exports = {
             saveInPromise(user);
         })
         .fail(function (error) {
-            console.log("refreshAccessToken() promise.then()");
+            console.log("refreshAccessToken() promise.fail()");
             console.log("error printed below");
             console.log(JSON.stringify(error));
         })
@@ -339,7 +339,7 @@ module.exports = exports = {
                             console.log("getAllData() Q.all() Errors:");
                             console.log(results[0][0].errors);
                             //return;
-                            exports.refreshAccessToken(id, accessToken, refreshToken);
+                            exports.refreshAccessToken(id, user.accessToken, user.refreshToken);
                         }
                         console.log("getAllData() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
