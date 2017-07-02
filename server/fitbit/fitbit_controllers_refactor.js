@@ -338,7 +338,8 @@ module.exports = exports = {
                         if(results[0][0].errors){
                             console.log("getAllData() Q.all() Errors:");
                             console.log(results[0][0].errors);
-                            return;
+                            //return;
+                            exports.refreshAccessToken(id, accessToken, refreshToken);
                         }
                         console.log("getAllData() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
