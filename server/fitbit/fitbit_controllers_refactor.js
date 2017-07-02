@@ -333,8 +333,13 @@ module.exports = exports = {
 
                 return Q.all(promiseArray)
                     .then(function (results) {
-                        console.log("Logging Results:");
-                        console.log(results);
+                        //console.log("Logging Results:");
+                        //console.log(results);
+                        if(results[0][0].errors){
+                            console.log("getAllData() Q.all() Errors:");
+                            console.log(results[0][0].errors);
+                            return;
+                        }
                         console.log("getAllData() 5");
                         //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
