@@ -41,8 +41,8 @@ module.exports = exports = {
   post : function(req, res, next) {
     var $promise = Q.nbind(Item.create, Item);
     $promise(req.body.item)
-      .then(function (_id) {
-        res.send(_id);
+      .then(function (id) {
+        res.send(id);
       })
       .fail(function (reason) {
         next(reason);
