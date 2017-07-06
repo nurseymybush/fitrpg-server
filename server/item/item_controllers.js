@@ -39,7 +39,7 @@ module.exports = exports = {
       })
   },
   post : function(req, res, next) {
-    var $promise = Q.nbind(Item.save, Item);
+    var $promise = Q.nbind(Item.create, Item);
     $promise(req.body.item)
       .then(function (id) {
         res.send(id);
