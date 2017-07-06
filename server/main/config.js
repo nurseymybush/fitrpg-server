@@ -46,17 +46,20 @@ module.exports = exports = function (app, express, passport, routers) {
   app.use(passport.initialize());
   app.use(passport.session());
   app.use('/fitbit', routers.FitbitRouter);
-  app.use('/jawbone', routers.JawboneRouter);
+  //app.use('/jawbone', routers.JawboneRouter);
   app.use('/api', expressJwt({secret: process.env.SECRET || 'secret'}))
   app.use('/api/users' , routers.UserRouter);
-  app.use('/api/solos' , routers.SoloRouter);
-  app.use('/api/groups', routers.GroupRouter);
-  app.use('/api/pastsolos' , routers.PastSoloRouter);
-  app.use('/api/pastgroups', routers.PastGroupRouter);
-  app.use('/api/items', routers.ItemRouter);
-  //app.use('/items', routers.ItemRouter);//chance try api stuff
+  //app.use('/api/solos' , routers.SoloRouter);
+  app.use('/solos' , routers.SoloRouter);
+  //app.use('/api/groups', routers.GroupRouter);
+  //app.use('/api/pastsolos' , routers.PastSoloRouter);
+  //app.use('/api/pastgroups', routers.PastGroupRouter);
+  //app.use('/api/items', routers.ItemRouter);
+  app.use('/items', routers.ItemRouter);//chance try api stuff
   app.use('/api/battles', routers.BattleRouter);
-  app.use('/api/quests', routers.QuestRouter);
+  //app.use('/battles', routers.BattleRouter);
+  //app.use('/api/quests', routers.QuestRouter);
+  app.use('/quests', routers.QuestRouter);
   app.use('/feedback', routers.FeedbackRouter);
   app.use('/settings', routers.SettingsRouter);
   app.use(middle.logError);
