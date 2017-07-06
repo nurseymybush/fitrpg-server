@@ -57,7 +57,7 @@ module.exports = exports = function (app, express, passport, routers) {
   //app.use('/api/items', routers.ItemRouter);
   app.use('/items', routers.ItemRouter);//chance try api stuff
   //app.use('/api/battles', routers.BattleRouter);
-  app.use('/battles', routers.BattleRouter);
+  //app.use('/battles', routers.BattleRouter);
   //app.use('/api/quests', routers.QuestRouter);
   app.use('/quests', routers.QuestRouter);
   //app.use('/feedback', routers.FeedbackRouter);
