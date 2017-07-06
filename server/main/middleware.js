@@ -15,7 +15,8 @@ module.exports = exports = {
 
   handleError: function (err, req, res, next) {
     if (err) {
-      res.status(status).send(err, 500);
+      //res.status(status).send(err, 500);
+      res.status(err.status).send(err, 500);
     }
   },
 
