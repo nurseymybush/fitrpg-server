@@ -61,11 +61,11 @@ var UserSchema = new mongoose.Schema({
     experience   : {type: Number, default: 0}
   },
   bonusAttributes : {//this is the bonus for equipped items and weapons
-    vitality   : {type: Number, default: 20},
-    strength   : {type: Number, default: 20},
-    endurance  : {type: Number, default: 20},
-    dexterity  : {type: Number, default: 20},
-    HP         : {type: Number, default: 500}
+    vitality   : {type: Number, default: 0},
+    strength   : {type: Number, default: 0},
+    endurance  : {type: Number, default: 0},
+    dexterity  : {type: Number, default: 0},
+    HP         : {type: Number, default: 0}
   },
   jawbone : {
     sleepQuality       : String,
