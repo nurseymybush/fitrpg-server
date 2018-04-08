@@ -35,11 +35,11 @@ module.exports = exports = {
             var timestamp = new Date();
             userId = profile.id;
             
-            console.log("fitbitStrategy()");
+            //console.log("fitbitStrategy()");
             console.log("fitbitStrategy() accessToken: " + accessToken);
             console.log("fitbitStrategy() refreshToken: " + refreshToken);
-            console.log("fitbitStrategy() profile:");
-            console.log(JSON.stringify(profile));
+            //console.log("fitbitStrategy() profile:");
+            //console.log(JSON.stringify(profile));
             
             process.nextTick(function () {
                 var promise = User.findById({
@@ -47,8 +47,10 @@ module.exports = exports = {
                 }).exec();
                 promise.then(function (foundUser) {
                     if (foundUser) {
+                        console.log("fitbitStrategy() process.then() foundUser true");
                         done(null, foundUser);
                     } else {
+                        console.log("fitbitStrategy() process.then() foundUser false");
                         var currentUser = new User({
                             _id: userId,
                             createdAt: timestamp,
@@ -113,8 +115,8 @@ module.exports = exports = {
             //console.log("printing user");
             //console.log(user); //prints correctly
             console.log("refreshAccessToken() 3");
-            console.log("printing client");
-            console.log(JSON.stringify(client));
+            //console.log("printing client");
+            //console.log(JSON.stringify(client));
 
             return client.refreshAccessToken(accessToken, refreshToken, expiresInSeconds).then(function (result) {
                 console.log("refreshAccessToken() 4");
@@ -161,7 +163,7 @@ module.exports = exports = {
             },
             process.env.SECRET || "secret", {
                 //expiresIn: "7d"
-                expiresIn: "1h" //1 hour to test refreshTokens
+                expiresIn: "1h" //1 hour to test refreshTokens, if you put "60"- that is 60 seconds
             }
         );
         console.log("getOauthToken() userToken: " + userToken);
