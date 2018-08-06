@@ -144,6 +144,9 @@ module.exports = exports = {
             console.log("refreshAccessToken() promise.fail()");
             console.log("error printed below");
             console.log(JSON.stringify(error));
+
+            //refresh token invalid - logout user
+            return null;
         })
         .done(function () {
             console.log("refreshAccessToken() end");
@@ -259,8 +262,13 @@ module.exports = exports = {
 
         var id = req.params.id;
         console.log("retreiveData() id: " + id);
-        exports.getAllData(id);
-        res.sendStatus(200);
+        var user = exports.getAllData(id);
+        if(user){
+            res.sendStatus(200);
+        } else {
+            console.log('')
+            res.sendStatus(500);
+        }
     },
 
     getAllData: function (id, cb, accessToken, refreshToken) {
@@ -341,99 +349,101 @@ module.exports = exports = {
                             console.log("getAllData() Q.all() Errors:");
                             console.log(results[0][0].errors);
                             //return;
-                            exports.refreshAccessToken(id, user.accessToken, user.refreshToken);
-                        }
-                        console.log("getAllData() 5");
-                        //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
-
-                        //process profile
-                        var profile = results[0][0]['user'];
-                        user.profile.avatar = profile.avatar;
-                        user.provider = 'fitbit';
-                        user.profile.displayName = profile.displayName;
-
-                        console.log("getAllData() 6");
-                        //process friends
-                        var friends = results[1][0]['friends'];
-                        var currentFriends = user.friends;
-                        var fitbitFriends = [];
-                        for (var i = 0; i < friends.length; i++) {
-                            fitbitFriends.push(friends[i].user.encodedId);
-                        }
-
-                        console.log("getAllData() 7");
-                        // get unique friends
-                        for (var i = 0; i < currentFriends.length; i++) {
-                            if (fitbitFriends.indexOf(currentFriends[i]) < 0) {
-                                fitbitFriends.push(currentFriends[i]);
-                            }
-                        }
-                        user.friends = fitbitFriends;
-
-                        console.log("getAllData() 8");
-                        //process steps
-                        var activities_tracker_steps = results[2][0]['activities-tracker-steps'];
-                        user.attributes.experience = user.attributes.experience || 0;
-                        user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
-                        var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
-                        user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
-                        user.attributes.level = level;
-
-                        console.log("getAllData() 9");
-                        //process sleep vitality
-                        var sleep_minutesAsleep_vitality = results[3][0]['sleep-minutesAsleep'];
-                        user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep_vitality);
-
-                        console.log("getAllData() 10");
-                        //process distance
-                        var activities_tracker_distance = results[4][0]['activities-tracker-distance'];
-                        user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
-
-                        console.log("getAllData() 11");
-                        //process active minutes
-                        var activities_minutesVeryActive = results[5][0]['activities-minutesVeryActive'];
-                        user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
-
-                        console.log("getAllData() 12");
-                        //process sleep hp recovery
-                        if(results[6]){
-                        var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'] !== "undefined" ? results[6][0]['sleep-minutesAsleep'] : null;
-                        console.log('sleep_minutesAsleep_hprecovery: ' + sleep_minutesAsleep_hprecovery);
-                        if ((hpLastChecked !== today || HPChecker.foundSleep !== true) && sleep_minutesAsleep_hprecovery) {
-                            console.log("getAllData() 12.5");
-                            user.HPChecker.dateLastChecked = new Date();
-                            user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep_hprecovery);
-                            if (user.fitbit.HPRecov > 0) {
-                                user.HPChecker.foundSleep = true;
-                            }
-                        }
+                            return exports.refreshAccessToken(id, user.accessToken, user.refreshToken);
                         } else {
-                            console.log("getAllData() no results[6]");
-                        }                    
+                            console.log("getAllData() 5");
+                            //TODO - each processing part should be in its own function probably, just doing it this way to try the refactor
 
-                        console.log("getAllData() 13");
-                        //process last week activities
-                        var dexterity = 0;
-                        var strength = 0;
-                        //for (var i = 7; i < 14; ++i) {
-                        if(results[7]){
-                            var activities_workouts = results[7][0]['activities'];
-                            //var activities_workouts = results[i][0]['activities']; //getting an error here because it is empty array
-                            dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
-                            strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
-                        //}
-                        user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
-                        user.fitbit.strength = user.fitbit.strength + strength;
-                        } else {
-                            console.log("getAllData() no results[7]");
-                        }
-                        
-                        console.log("getAllData() 14");
-                        return user;
+                            //process profile
+                            var profile = results[0][0]['user'];
+                            user.profile.avatar = profile.avatar;
+                            user.provider = 'fitbit';
+                            user.profile.displayName = profile.displayName;
+
+                            console.log("getAllData() 6");
+                            //process friends
+                            var friends = results[1][0]['friends'];
+                            var currentFriends = user.friends;
+                            var fitbitFriends = [];
+                            for (var i = 0; i < friends.length; i++) {
+                                fitbitFriends.push(friends[i].user.encodedId);
+                            }
+
+                            console.log("getAllData() 7");
+                            // get unique friends
+                            for (var i = 0; i < currentFriends.length; i++) {
+                                if (fitbitFriends.indexOf(currentFriends[i]) < 0) {
+                                    fitbitFriends.push(currentFriends[i]);
+                                }
+                            }
+                            user.friends = fitbitFriends;
+
+                            console.log("getAllData() 8");
+                            //process steps
+                            var activities_tracker_steps = results[2][0]['activities-tracker-steps'];
+                            user.attributes.experience = user.attributes.experience || 0;
+                            user.fitbit.experience = utils.calcCumValue(activities_tracker_steps);
+                            var level = utils.calcLevel(user.fitbit.experience + user.attributes.experience, user.attributes.level);
+                            user.attributes.skillPts = utils.calcSkillPoints(user.attributes.skillPts, level, user.attributes.level);
+                            user.attributes.level = level;
+
+                            console.log("getAllData() 9");
+                            //process sleep vitality
+                            var sleep_minutesAsleep_vitality = results[3][0]['sleep-minutesAsleep'];
+                            user.fitbit.vitality = utils.calcVitality(sleep_minutesAsleep_vitality);
+
+                            console.log("getAllData() 10");
+                            //process distance
+                            var activities_tracker_distance = results[4][0]['activities-tracker-distance'];
+                            user.fitbit.endurance = utils.calcEndurance(activities_tracker_distance);
+
+                            console.log("getAllData() 11");
+                            //process active minutes
+                            var activities_minutesVeryActive = results[5][0]['activities-minutesVeryActive'];
+                            user.fitbit.attackBonus = utils.calcAttackBonus(activities_minutesVeryActive);
+
+                            console.log("getAllData() 12");
+                            //process sleep hp recovery
+                            if(results[6]){
+                            var sleep_minutesAsleep_hprecovery = results[6][0]['sleep-minutesAsleep'] !== "undefined" ? results[6][0]['sleep-minutesAsleep'] : null;
+                            console.log('sleep_minutesAsleep_hprecovery: ' + sleep_minutesAsleep_hprecovery);
+                            if ((hpLastChecked !== today || HPChecker.foundSleep !== true) && sleep_minutesAsleep_hprecovery) {
+                                console.log("getAllData() 12.5");
+                                user.HPChecker.dateLastChecked = new Date();
+                                user.fitbit.HPRecov = utils.calcHpRecov(sleep_minutesAsleep_hprecovery);
+                                if (user.fitbit.HPRecov > 0) {
+                                    user.HPChecker.foundSleep = true;
+                                }
+                            }
+                            } else {
+                                console.log("getAllData() no results[6]");
+                            }                    
+
+                            console.log("getAllData() 13");
+                            //process last week activities
+                            var dexterity = 0;
+                            var strength = 0;
+                            //for (var i = 7; i < 14; ++i) {
+                            if(results[7]){
+                                var activities_workouts = results[7][0]['activities'];
+                                //var activities_workouts = results[i][0]['activities']; //getting an error here because it is empty array
+                                dexterity += utils.calcStrDex(activities_workouts, fitIds.dexterityIds);
+                                strength += utils.calcStrDex(activities_workouts, fitIds.strengthIds);
+                            //}
+                            user.fitbit.dexterity = user.fitbit.dexterity + dexterity;
+                            user.fitbit.strength = user.fitbit.strength + strength;
+                            } else {
+                                console.log("getAllData() no results[7]");
+                            }
+
+                            console.log("getAllData() 14");
+                            return user;
+                    }
                     })
                     .fail(function (err) {
                         console.log("getAllData() Q.all fail");
                         console.log(err);
+                        return null;
                     });
             })
             .then(function (user) {
@@ -445,6 +455,7 @@ module.exports = exports = {
                 console.log("error printed below");
                 console.log(JSON.stringify(err));
                 //TODO chance refresh token stuff
+                return null;
             })
             .done();
     },
